@@ -1,29 +1,37 @@
 package com.bogdanorzea.bakingapp.data.database;
 
-import com.google.gson.annotations.Expose;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+@Entity(tableName = "receipts")
 public class Receipt {
+    @PrimaryKey
     @SerializedName("id")
-    @Expose
     private Integer id;
     @SerializedName("name")
-    @Expose
     private String name;
     @SerializedName("ingredients")
-    @Expose
+    @Ignore
     private List<Ingredient> ingredients = null;
     @SerializedName("steps")
-    @Expose
+    @Ignore
     private List<Step> steps = null;
     @SerializedName("servings")
-    @Expose
     private Integer servings;
     @SerializedName("image")
-    @Expose
     private String image;
+
+    public Receipt(Integer id, String name, Integer servings, String image) {
+        this.id = id;
+        this.name = name;
+        this.servings = servings;
+        this.image = image;
+    }
 
     public Integer getId() {
         return id;
@@ -72,5 +80,4 @@ public class Receipt {
     public void setImage(String image) {
         this.image = image;
     }
-
 }

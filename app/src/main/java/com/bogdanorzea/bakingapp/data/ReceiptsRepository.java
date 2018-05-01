@@ -1,49 +1,66 @@
 package com.bogdanorzea.bakingapp.data;
 
+import android.arch.lifecycle.LiveData;
+
+import com.bogdanorzea.bakingapp.AppExecutors;
 import com.bogdanorzea.bakingapp.data.database.Receipt;
-import com.bogdanorzea.bakingapp.data.network.ResponseApiService;
+import com.bogdanorzea.bakingapp.data.database.ReceiptDao;
+import com.bogdanorzea.bakingapp.data.network.ReceiptsNetworkDataSource;
 
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
 public class ReceiptsRepository {
+    private static final Object LOCK = new Object();
+    private static ReceiptsRepository sInstance;
+    private final AppExecutors mExecutors;
+    private final ReceiptDao mReceiptsDao;
+    private final ReceiptsNetworkDataSource mReceiptsNetworkDataSource;
+    private boolean mInitialized;
 
-    public void getReceipts() {
-        String API_BASE_URL = "https://d17h27t6h515a5.cloudfront.net";
+    private ReceiptsRepository(AppExecutors executors,
+                               ReceiptDao receiptDao,
+                               ReceiptsNetworkDataSource receiptsNetworkDataSource) {
+        this.mReceiptsNetworkDataSource = receiptsNetworkDataSource;
+        this.mReceiptsDao = receiptDao;
+        this.mExecutors = executors;
 
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(API_BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
-                .build();
-
-        ResponseApiService apiService = retrofit.create(ResponseApiService.class);
-
-        Call<List<Receipt>> call = apiService.getReceipts();
-        call.enqueue(new Callback<List<Receipt>>() {
-            @Override
-            public void onResponse(Call<List<Receipt>> call, Response<List<Receipt>> response) {
-                if (response.isSuccessful()) {
-                    for (Receipt receipt: response.body()) {
-                        Timber.d(receipt.getName());
-                    }
-                } else {
-                    Timber.e("Response code %s and raw body: %s.", response.code(), response.raw());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Receipt>> call, Throwable t) {
-                Timber.d(t.toString());
-            }
+        LiveData<List<Receipt>> networkData = receiptsNetworkDataSource.getDownloadedReceipts();
+        networkData.observeForever(newReceiptsFromNetwork -> {
+            mExecutors.diskIO().execute(() -> {
+                mReceiptsDao.bulkInsert(newReceiptsFromNetwork);
+                Timber.d("New receipts inserted in the database");
+            });
         });
+    }
+
+    public synchronized static ReceiptsRepository getInstance(AppExecutors executors, ReceiptDao receiptDao, ReceiptsNetworkDataSource receiptsNetworkDataSource) {
+        Timber.d("Getting the repository");
+        if (sInstance == null) {
+            synchronized (LOCK) {
+                sInstance = new ReceiptsRepository(executors, receiptDao, receiptsNetworkDataSource);
+                Timber.d("New repository created");
+            }
+        }
+
+        return sInstance;
+    }
+
+    public LiveData<List<Receipt>> getReceipts() {
+        initialize();
+
+        return mReceiptsDao.getAllReceipts();
+    }
+
+    private void initialize() {
+        if (mInitialized) return;
+        mInitialized = true;
+
+        startFetchReceiptsService();
+    }
+
+    private void startFetchReceiptsService() {
+        mReceiptsNetworkDataSource.startFetchReceiptsService();
     }
 }
