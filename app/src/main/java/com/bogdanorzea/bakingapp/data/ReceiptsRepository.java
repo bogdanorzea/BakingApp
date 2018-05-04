@@ -53,6 +53,10 @@ public class ReceiptsRepository {
         return mReceiptsDao.getAllReceipts();
     }
 
+    public LiveData<Receipt> getReceiptById(int id){
+        return mReceiptsDao.getReceiptById(id);
+    }
+
     private void initialize() {
         if (mInitialized) return;
         mInitialized = true;

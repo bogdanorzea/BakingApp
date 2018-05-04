@@ -53,7 +53,7 @@ class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
     }
 
     public interface OnItemClickHandler {
-        void onItemClick(int position);
+        void onItemClick(int recipeId);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -69,7 +69,7 @@ class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            mClickHandler.onItemClick(getAdapterPosition());
+            mClickHandler.onItemClick(mReceipts.get(getAdapterPosition()).getId());
         }
     }
 }

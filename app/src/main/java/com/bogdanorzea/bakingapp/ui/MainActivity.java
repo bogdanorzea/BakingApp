@@ -1,6 +1,7 @@
 package com.bogdanorzea.bakingapp.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,7 +37,12 @@ public class MainActivity extends AppCompatActivity implements ReceiptsAdapter.O
     }
 
     @Override
-    public void onItemClick(int position) {
-        Timber.d("Receipt at position %s was clicked", position);
+    public void onItemClick(int recipeId) {
+        Timber.d("Receipt at position %s was clicked", recipeId);
+
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.RECIPE_ID, recipeId);
+
+        startActivity(intent);
     }
 }
