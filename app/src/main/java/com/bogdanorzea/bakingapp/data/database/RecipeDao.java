@@ -11,6 +11,9 @@ import java.util.List;
 @Dao
 public interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Recipe recipeEntity);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void bulkInsert(List<Recipe> recipeEntities);
 
     @Query("SELECT * FROM recipes WHERE id = :id")

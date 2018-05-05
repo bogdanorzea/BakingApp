@@ -12,7 +12,13 @@ public class Ingredient {
     private String measure;
     @SerializedName("ingredient")
     @Expose
-    private String ingredient;
+    private String name;
+
+    public Ingredient(Double quantity, String measure, String name) {
+        this.quantity = quantity;
+        this.measure = measure;
+        this.name = name;
+    }
 
     public Double getQuantity() {
         return quantity;
@@ -30,11 +36,11 @@ public class Ingredient {
         this.measure = measure;
     }
 
-    public String getIngredient() {
-        return ingredient;
+    public String getName() {
+        return name;
     }
 
-    public void setIngredient(String ingredient) {
-        this.ingredient = ingredient;
+    public void setName(String name) {
+        this.name = name;
     }
 }

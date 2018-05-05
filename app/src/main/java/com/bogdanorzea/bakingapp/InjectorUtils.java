@@ -21,7 +21,7 @@ public class InjectorUtils {
         RecipesNetworkDataSource recipesNetworkDataSource =
                 RecipesNetworkDataSource.getInstance(context.getApplicationContext(), executors);
 
-        return RecipesRepository.getInstance(executors, db.recipeDao(), recipesNetworkDataSource);
+        return RecipesRepository.getInstance(executors, db.getRecipeDao(), recipesNetworkDataSource);
     }
 
     public static MainActivityViewModelFactory provideMainViewViewModelFactory(Context context) {
