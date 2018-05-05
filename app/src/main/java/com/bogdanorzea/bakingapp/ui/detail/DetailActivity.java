@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui;
+package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -47,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
         if (mId != -1) {
             DetailActivityViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, mId);
             mViewModel = ViewModelProviders.of(this, factory).get(DetailActivityViewModel.class);
-            mViewModel.getReceipt().observe(this, newRecipe -> {
+            mViewModel.getRecipe().observe(this, newRecipe -> {
                 Timber.d(newRecipe.getName());
             });
         }

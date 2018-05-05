@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui;
+package com.bogdanorzea.bakingapp.ui.main;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,23 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bogdanorzea.bakingapp.data.database.Receipt;
+import com.bogdanorzea.bakingapp.data.database.Recipe;
 
 import java.util.List;
 
-class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
+class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
     private final Context mContext;
     private final OnItemClickHandler mClickHandler;
-    private List<Receipt> mReceipts;
+    private List<Recipe> mRecipes;
 
-    public ReceiptsAdapter(Context context, OnItemClickHandler onItemClickHandler) {
+    public RecipesAdapter(Context context, OnItemClickHandler onItemClickHandler) {
         mContext = context;
         mClickHandler = onItemClickHandler;
     }
 
     @NonNull
     @Override
-    public ReceiptsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecipesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
                 .inflate(android.R.layout.simple_list_item_1, parent, false);
 
@@ -32,24 +32,22 @@ class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ReceiptsAdapter.ViewHolder holder, int position) {
-        Receipt currentReceipt = mReceipts.get(position);
+    public void onBindViewHolder(@NonNull RecipesAdapter.ViewHolder holder, int position) {
+        Recipe currentRecipe = mRecipes.get(position);
 
-        holder.mText.setText(currentReceipt.getName());
+        holder.mText.setText(currentRecipe.getName());
     }
 
     @Override
     public int getItemCount() {
-        if (mReceipts == null) return 0;
+        if (mRecipes == null) return 0;
 
-        return mReceipts.size();
+        return mRecipes.size();
     }
 
-    public void swapReceipts(List<Receipt> receipts) {
-        if (mReceipts == null) {
-            mReceipts = receipts;
-            notifyDataSetChanged();
-        }
+    public void swapRecipes(List<Recipe> recipes) {
+        mRecipes = recipes;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickHandler {
@@ -69,7 +67,7 @@ class ReceiptsAdapter extends RecyclerView.Adapter<ReceiptsAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            mClickHandler.onItemClick(mReceipts.get(getAdapterPosition()).getId());
+            mClickHandler.onItemClick(mRecipes.get(getAdapterPosition()).getId());
         }
     }
 }

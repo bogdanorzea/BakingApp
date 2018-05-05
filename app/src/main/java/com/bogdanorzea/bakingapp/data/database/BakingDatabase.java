@@ -5,9 +5,9 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Receipt.class}, version = 1, exportSchema = false)
+@Database(entities = {Recipe.class}, version = 1, exportSchema = false)
 public abstract class BakingDatabase extends RoomDatabase {
-    private static final String DATABASE_NAME = "baking";
+    private static final String DATABASE_NAME = "recipes";
     private static final Object LOCK = new Object();
     private static volatile BakingDatabase sInstance;
 
@@ -25,5 +25,5 @@ public abstract class BakingDatabase extends RoomDatabase {
         return sInstance;
     }
 
-    public abstract ReceiptDao receiptDao();
+    public abstract RecipeDao recipeDao();
 }

@@ -2,36 +2,36 @@ package com.bogdanorzea.bakingapp;
 
 import android.content.Context;
 
-import com.bogdanorzea.bakingapp.data.ReceiptsRepository;
+import com.bogdanorzea.bakingapp.data.RecipesRepository;
 import com.bogdanorzea.bakingapp.data.database.BakingDatabase;
-import com.bogdanorzea.bakingapp.data.network.ReceiptsNetworkDataSource;
-import com.bogdanorzea.bakingapp.ui.DetailActivityViewModelFactory;
-import com.bogdanorzea.bakingapp.ui.MainActivityViewModelFactory;
+import com.bogdanorzea.bakingapp.data.network.RecipesNetworkDataSource;
+import com.bogdanorzea.bakingapp.ui.detail.DetailActivityViewModelFactory;
+import com.bogdanorzea.bakingapp.ui.main.MainActivityViewModelFactory;
 
 public class InjectorUtils {
-    public static ReceiptsNetworkDataSource provideNetworkDataSource(Context context) {
+    public static RecipesNetworkDataSource provideNetworkDataSource(Context context) {
         AppExecutors executors = AppExecutors.getInstance();
 
-        return ReceiptsNetworkDataSource.getInstance(context.getApplicationContext(), executors);
+        return RecipesNetworkDataSource.getInstance(context.getApplicationContext(), executors);
     }
 
-    public static ReceiptsRepository provideReceiptsRepository(Context context) {
+    public static RecipesRepository provideRecipesRepository(Context context) {
         BakingDatabase db = BakingDatabase.getInstance(context);
         AppExecutors executors = AppExecutors.getInstance();
-        ReceiptsNetworkDataSource receiptsNetworkDataSource =
-                ReceiptsNetworkDataSource.getInstance(context.getApplicationContext(), executors);
+        RecipesNetworkDataSource recipesNetworkDataSource =
+                RecipesNetworkDataSource.getInstance(context.getApplicationContext(), executors);
 
-        return ReceiptsRepository.getInstance(executors, db.receiptDao(), receiptsNetworkDataSource);
+        return RecipesRepository.getInstance(executors, db.recipeDao(), recipesNetworkDataSource);
     }
 
     public static MainActivityViewModelFactory provideMainViewViewModelFactory(Context context) {
-        ReceiptsRepository repository = provideReceiptsRepository(context.getApplicationContext());
+        RecipesRepository repository = provideRecipesRepository(context.getApplicationContext());
 
         return new MainActivityViewModelFactory(repository);
     }
 
     public static DetailActivityViewModelFactory provideDetailViewModelFactory(Context context, int id) {
-        ReceiptsRepository repository = provideReceiptsRepository(context.getApplicationContext());
+        RecipesRepository repository = provideRecipesRepository(context.getApplicationContext());
 
         return new DetailActivityViewModelFactory(repository, id);
     }

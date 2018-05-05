@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui;
+package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;

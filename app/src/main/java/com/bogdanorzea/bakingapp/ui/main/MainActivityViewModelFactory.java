@@ -1,14 +1,14 @@
-package com.bogdanorzea.bakingapp.ui;
+package com.bogdanorzea.bakingapp.ui.main;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.bogdanorzea.bakingapp.data.ReceiptsRepository;
+import com.bogdanorzea.bakingapp.data.RecipesRepository;
 
 public class MainActivityViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private final ReceiptsRepository mRepository;
+    private final RecipesRepository mRepository;
 
-    public MainActivityViewModelFactory(ReceiptsRepository repository) {
+    public MainActivityViewModelFactory(RecipesRepository repository) {
         this.mRepository = repository;
     }
 

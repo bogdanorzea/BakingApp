@@ -8,16 +8,16 @@ import com.bogdanorzea.bakingapp.InjectorUtils;
 
 import timber.log.Timber;
 
-public class ReceiptsSyncIntentService extends IntentService {
+public class RecipesSyncIntentService extends IntentService {
 
-    public ReceiptsSyncIntentService() {
-        super("ReceiptsSyncIntentService");
+    public RecipesSyncIntentService() {
+        super("RecipesSyncIntentService");
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Timber.d("Intent service started");
-        ReceiptsNetworkDataSource networkDataSource = InjectorUtils.provideNetworkDataSource(this.getApplicationContext());
-        networkDataSource.getReceipts();
+        RecipesNetworkDataSource networkDataSource = InjectorUtils.provideNetworkDataSource(this.getApplicationContext());
+        networkDataSource.getRecipes();
     }
 }

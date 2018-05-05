@@ -9,13 +9,13 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 @Dao
-public interface ReceiptDao {
+public interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void bulkInsert(List<Receipt> receiptEntities);
+    void bulkInsert(List<Recipe> recipeEntities);
 
-    @Query("SELECT * FROM receipts WHERE id = :id")
-    LiveData<Receipt> getReceiptById(int id);
+    @Query("SELECT * FROM recipes WHERE id = :id")
+    LiveData<Recipe> getRecipeById(int id);
 
-    @Query("SELECT * FROM receipts")
-    LiveData<List<Receipt>> getAllReceipts();
+    @Query("SELECT * FROM recipes")
+    LiveData<List<Recipe>> getRecipes();
 }

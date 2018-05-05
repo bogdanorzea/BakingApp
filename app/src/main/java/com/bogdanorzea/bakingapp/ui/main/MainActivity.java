@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui;
+package com.bogdanorzea.bakingapp.ui.main;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -9,36 +9,37 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
+import com.bogdanorzea.bakingapp.ui.detail.DetailActivity;
 
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements ReceiptsAdapter.OnItemClickHandler {
+public class MainActivity extends AppCompatActivity implements RecipesAdapter.OnItemClickHandler {
 
     private MainActivityViewModel mViewModel;
-    private ReceiptsAdapter mAdapter;
+    private RecipesAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView mRecyclerView = findViewById(R.id.receipt_list);
+        RecyclerView mRecyclerView = findViewById(R.id.recipe_list);
         mRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        mAdapter = new ReceiptsAdapter(this, this);
+        mAdapter = new RecipesAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
 
         MainActivityViewModelFactory factory = InjectorUtils.provideMainViewViewModelFactory(this);
         mViewModel = ViewModelProviders.of(this, factory).get(MainActivityViewModel.class);
-        mViewModel.getReceipts().observe(this, newReceipts -> {
-            mAdapter.swapReceipts(newReceipts);
+        mViewModel.getRecipes().observe(this, newRecipes -> {
+            mAdapter.swapRecipes(newRecipes);
         });
     }
 
     @Override
     public void onItemClick(int recipeId) {
-        Timber.d("Receipt at position %s was clicked", recipeId);
+        Timber.d("Recipe at position %s was clicked", recipeId);
 
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.RECIPE_ID, recipeId);

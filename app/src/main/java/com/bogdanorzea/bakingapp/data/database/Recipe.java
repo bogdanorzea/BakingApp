@@ -8,8 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@Entity(tableName = "receipts")
-public class Receipt {
+@Entity(tableName = "recipes")
+public class Recipe {
     @PrimaryKey
     @SerializedName("id")
     private Integer id;
@@ -26,7 +26,7 @@ public class Receipt {
     @SerializedName("image")
     private String image;
 
-    public Receipt(Integer id, String name, Integer servings, String image) {
+    public Recipe(Integer id, String name, Integer servings, String image) {
         this.id = id;
         this.name = name;
         this.servings = servings;

@@ -1,6 +1,6 @@
 package com.bogdanorzea.bakingapp.data.network;
 
-import com.bogdanorzea.bakingapp.data.database.Receipt;
+import com.bogdanorzea.bakingapp.data.database.Recipe;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ import retrofit2.http.GET;
  */
 public interface ResponseApiService {
     @GET("/topher/2017/May/59121517_baking/baking.json")
-    Call<List<Receipt>> getReceipts();
+    Call<List<Recipe>> getRecipes();
 }

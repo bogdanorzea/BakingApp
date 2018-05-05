@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.bogdanorzea.bakingapp.AppExecutors;
-import com.bogdanorzea.bakingapp.data.database.Receipt;
+import com.bogdanorzea.bakingapp.data.database.Recipe;
 
 import java.util.List;
 
@@ -17,24 +17,24 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
 
-public class ReceiptsNetworkDataSource {
+public class RecipesNetworkDataSource {
     private static final Object LOCK = new Object();
-    private static ReceiptsNetworkDataSource sInstance;
-    private final MutableLiveData<List<Receipt>> mDownloadedReceipts;
+    private static RecipesNetworkDataSource sInstance;
+    private final MutableLiveData<List<Recipe>> mDownloadedRecipes;
     private final Context mContext;
     private final AppExecutors mExecutors;
 
-    private ReceiptsNetworkDataSource(Context context, AppExecutors executors) {
+    private RecipesNetworkDataSource(Context context, AppExecutors executors) {
         mContext = context;
         mExecutors = executors;
-        mDownloadedReceipts = new MutableLiveData<>();
+        mDownloadedRecipes = new MutableLiveData<>();
     }
 
-    public synchronized static ReceiptsNetworkDataSource getInstance(Context context, AppExecutors executors) {
+    public synchronized static RecipesNetworkDataSource getInstance(Context context, AppExecutors executors) {
         Timber.d("Getting the network data source");
         if (sInstance == null) {
             synchronized (LOCK) {
-                sInstance = new ReceiptsNetworkDataSource(context.getApplicationContext(), executors);
+                sInstance = new RecipesNetworkDataSource(context.getApplicationContext(), executors);
                 Timber.d("New network data source created");
             }
         }
@@ -42,11 +42,11 @@ public class ReceiptsNetworkDataSource {
         return sInstance;
     }
 
-    public MutableLiveData<List<Receipt>> getDownloadedReceipts() {
-        return mDownloadedReceipts;
+    public MutableLiveData<List<Recipe>> getDownloadedRecipes() {
+        return mDownloadedRecipes;
     }
 
-    public void getReceipts() {
+    public void getRecipes() {
         String API_BASE_URL = "https://d17h27t6h515a5.cloudfront.net";
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -58,26 +58,26 @@ public class ReceiptsNetworkDataSource {
 
         ResponseApiService apiService = retrofit.create(ResponseApiService.class);
 
-        Call<List<Receipt>> call = apiService.getReceipts();
-        call.enqueue(new Callback<List<Receipt>>() {
+        Call<List<Recipe>> call = apiService.getRecipes();
+        call.enqueue(new Callback<List<Recipe>>() {
             @Override
-            public void onResponse(Call<List<Receipt>> call, Response<List<Receipt>> response) {
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 if (response.isSuccessful()) {
-                    mDownloadedReceipts.postValue(response.body());
+                    mDownloadedRecipes.postValue(response.body());
                 } else {
                     Timber.e("Response code %s and raw body: %s.", response.code(), response.raw());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Receipt>> call, Throwable t) {
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 Timber.d(t.toString());
             }
         });
     }
 
-    public void startFetchReceiptsService() {
-        Intent intentToFetch = new Intent(mContext, ReceiptsSyncIntentService.class);
+    public void startFetchRecipesService() {
+        Intent intentToFetch = new Intent(mContext, RecipesSyncIntentService.class);
         mContext.startService(intentToFetch);
     }
 }
