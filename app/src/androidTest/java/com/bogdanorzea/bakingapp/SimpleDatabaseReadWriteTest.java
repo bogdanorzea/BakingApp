@@ -9,6 +9,7 @@ import com.bogdanorzea.bakingapp.data.database.BakingDatabase;
 import com.bogdanorzea.bakingapp.data.database.Ingredient;
 import com.bogdanorzea.bakingapp.data.database.Recipe;
 import com.bogdanorzea.bakingapp.data.database.RecipeDao;
+import com.bogdanorzea.bakingapp.data.database.Step;
 import com.bogdanorzea.bakingapp.util.RecipeTestUtil;
 
 import org.junit.After;
@@ -16,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,15 +37,25 @@ public class SimpleDatabaseReadWriteTest {
 
     @Test
     public void writeRecipeAndReadList() throws InterruptedException {
-        Recipe recipe = new Recipe(1, "Test Recipe", 0, null);
+        final int ID = 1;
+
+        Recipe recipe = new Recipe(ID, "Test Recipe", 0, null);
         Ingredient ingredient = new Ingredient(1.0, "ml", "vanilla");
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient);
-
         recipe.setIngredients(ingredients);
+
+        Step step = new Step();
+        step.setId(1);
+        step.setDescription("Long description");
+        step.setShortDescription("Short description");
+        List<Step> steps = new ArrayList<>();
+        steps.add(step);
+        recipe.setSteps(steps);
+
         mDao.insert(recipe);
 
-        Recipe recipeById = getValue(mDao.getRecipeById(1));
+        Recipe recipeById = getValue(mDao.getRecipeById(ID));
         RecipeTestUtil.assertEquals(recipe, recipeById);
     }
 

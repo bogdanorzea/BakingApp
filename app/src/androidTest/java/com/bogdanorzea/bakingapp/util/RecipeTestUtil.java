@@ -2,6 +2,7 @@ package com.bogdanorzea.bakingapp.util;
 
 import com.bogdanorzea.bakingapp.data.database.Ingredient;
 import com.bogdanorzea.bakingapp.data.database.Recipe;
+import com.bogdanorzea.bakingapp.data.database.Step;
 
 import junit.framework.Assert;
 
@@ -16,6 +17,25 @@ public class RecipeTestUtil {
         Assert.assertEquals(oldRecipe.getName(), newRecipe.getName());
         Assert.assertEquals(oldRecipe.getImage(), newRecipe.getImage());
 
+        assertEqualIngredients(oldRecipe, newRecipe);
+        assertEqualSteps(oldRecipe, newRecipe);
+    }
+
+    private static void assertEqualSteps(Recipe oldRecipe, Recipe newRecipe) {
+        List<Step> oldRecipeSteps = oldRecipe.getSteps();
+        List<Step> newRecipeSteps = newRecipe.getSteps();
+
+        assertNotNull(oldRecipeSteps);
+        assertNotNull(newRecipeSteps);
+
+        Assert.assertEquals(oldRecipeSteps.size(), newRecipeSteps.size());
+
+        for (int i = 0; i < oldRecipeSteps.size(); i++) {
+            StepTestUtil.assertEquals(oldRecipeSteps.get(i), newRecipeSteps.get(i));
+        }
+    }
+
+    private static void assertEqualIngredients(Recipe oldRecipe, Recipe newRecipe) {
         List<Ingredient> oldRecipeIngredients = oldRecipe.getIngredients();
         List<Ingredient> newRecipeIngredients = newRecipe.getIngredients();
 
