@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
-
-import timber.log.Timber;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -44,11 +44,17 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
+        RecyclerView recyclerView = findViewById(R.id.recipe_content_list);
+        recyclerView.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        RecipeAdapter mAdapter = new RecipeAdapter(this);
+        recyclerView.setAdapter(mAdapter);
+
         if (mId != -1) {
             DetailActivityViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, mId);
             mViewModel = ViewModelProviders.of(this, factory).get(DetailActivityViewModel.class);
             mViewModel.getRecipe().observe(this, newRecipe -> {
-                Timber.d(newRecipe.getName());
+                mAdapter.swapIngredients(newRecipe);
             });
         }
     }

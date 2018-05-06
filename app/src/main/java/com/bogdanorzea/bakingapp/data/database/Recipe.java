@@ -80,4 +80,16 @@ public class Recipe {
     public void setImage(String image) {
         this.image = image;
     }
+
+    public String getStringIngredients() {
+        StringBuffer buffer = new StringBuffer("");
+
+        if (ingredients != null) {
+            for (Ingredient ingredient : ingredients) {
+                buffer.append(ingredient.getName()).append('\n');
+            }
+        }
+
+        return buffer.toString().trim();
+    }
 }
