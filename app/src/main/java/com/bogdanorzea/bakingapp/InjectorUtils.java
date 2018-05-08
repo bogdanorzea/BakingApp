@@ -5,7 +5,7 @@ import android.content.Context;
 import com.bogdanorzea.bakingapp.data.RecipesRepository;
 import com.bogdanorzea.bakingapp.data.database.BakingDatabase;
 import com.bogdanorzea.bakingapp.data.network.RecipesNetworkDataSource;
-import com.bogdanorzea.bakingapp.ui.detail.DetailActivityViewModelFactory;
+import com.bogdanorzea.bakingapp.ui.detail.recipe.RecipeActivityViewModelFactory;
 import com.bogdanorzea.bakingapp.ui.main.MainActivityViewModelFactory;
 
 public class InjectorUtils {
@@ -30,9 +30,9 @@ public class InjectorUtils {
         return new MainActivityViewModelFactory(repository);
     }
 
-    public static DetailActivityViewModelFactory provideDetailViewModelFactory(Context context, int id) {
+    public static RecipeActivityViewModelFactory provideDetailViewModelFactory(Context context, int id) {
         RecipesRepository repository = provideRecipesRepository(context.getApplicationContext());
 
-        return new DetailActivityViewModelFactory(repository, id);
+        return new RecipeActivityViewModelFactory(repository, id);
     }
 }

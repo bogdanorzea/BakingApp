@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui.detail;
+package com.bogdanorzea.bakingapp.ui.detail.recipe;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -14,11 +14,11 @@ import android.view.View;
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
 
-public class DetailActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity {
 
     public static final String RECIPE_ID = "RECIPE_ID";
     private int mId = -1;
-    private DetailActivityViewModel mViewModel;
+    private RecipeActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +51,8 @@ public class DetailActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         if (mId != -1) {
-            DetailActivityViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, mId);
-            mViewModel = ViewModelProviders.of(this, factory).get(DetailActivityViewModel.class);
+            RecipeActivityViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, mId);
+            mViewModel = ViewModelProviders.of(this, factory).get(RecipeActivityViewModel.class);
             mViewModel.getRecipe().observe(this, newRecipe -> {
                 mAdapter.swapIngredients(newRecipe);
             });

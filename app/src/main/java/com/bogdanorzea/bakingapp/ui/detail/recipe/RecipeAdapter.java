@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui.detail;
+package com.bogdanorzea.bakingapp.ui.detail.recipe;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

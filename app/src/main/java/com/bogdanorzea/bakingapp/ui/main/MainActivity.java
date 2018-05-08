@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
-import com.bogdanorzea.bakingapp.ui.detail.DetailActivity;
+import com.bogdanorzea.bakingapp.ui.detail.recipe.RecipeActivity;
 
 import timber.log.Timber;
 
@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     public void onItemClick(int recipeId) {
         Timber.d("Recipe at position %s was clicked", recipeId);
 
-        Intent intent = new Intent(this, DetailActivity.class);
-        intent.putExtra(DetailActivity.RECIPE_ID, recipeId);
+        Intent intent = new Intent(this, RecipeActivity.class);
+        intent.putExtra(RecipeActivity.RECIPE_ID, recipeId);
 
         startActivity(intent);
     }

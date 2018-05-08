@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui.detail;
+package com.bogdanorzea.bakingapp.ui.detail.recipe;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -11,9 +11,9 @@ import com.bogdanorzea.bakingapp.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment {
+public class RecipeActivityFragment extends Fragment {
 
-    public DetailActivityFragment() {
+    public RecipeActivityFragment() {
     }
 
     @Override

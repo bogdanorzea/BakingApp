@@ -25,13 +25,22 @@
         <service android:name=".data.network.RecipesSyncIntentService" />
 
         <activity
-            android:name=".ui.detail.DetailActivity"
+            android:name=".ui.detail.recipe.RecipeActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bogdanorzea.bakingapp.ui.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.detail.step.StepActivity"
+            android:label="@string/title_activity_step"
+            android:parentActivityName=".ui.detail.recipe.RecipeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bogdanorzea.bakingapp.ui.detail.recipe.RecipeActivity" />
         </activity>
     </application>
 
