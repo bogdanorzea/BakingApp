@@ -1,23 +1,43 @@
 package com.bogdanorzea.bakingapp.data.database;
 
-import com.google.gson.annotations.Expose;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "ingredients")
 public class Ingredient {
+    @PrimaryKey(autoGenerate = true)
+    private Integer id;
+    private Integer recipeId;
     @SerializedName("quantity")
-    @Expose
     private Double quantity;
     @SerializedName("measure")
-    @Expose
     private String measure;
     @SerializedName("ingredient")
-    @Expose
     private String name;
 
-    public Ingredient(Double quantity, String measure, String name) {
+    public Ingredient(Integer recipeId, Double quantity, String measure, String name) {
+        this.recipeId = recipeId;
         this.quantity = quantity;
         this.measure = measure;
         this.name = name;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(Integer recipeId) {
+        this.recipeId = recipeId;
     }
 
     public Double getQuantity() {

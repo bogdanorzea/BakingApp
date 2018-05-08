@@ -1,8 +1,9 @@
 package com.bogdanorzea.bakingapp.data.database;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -15,11 +16,12 @@ public class Recipe {
     private Integer id;
     @SerializedName("name")
     private String name;
+    @Ignore
+    @ForeignKey(entity = Ingredient.class, parentColumns = "id", childColumns = "recipeId")
     @SerializedName("ingredients")
-    @TypeConverters(IngredientListDataTypeConverter.class)
     private List<Ingredient> ingredients = null;
+    @Ignore
     @SerializedName("steps")
-    @TypeConverters(StepListDataTypeConverter.class)
     private List<Step> steps = null;
     @SerializedName("servings")
     private Integer servings;
