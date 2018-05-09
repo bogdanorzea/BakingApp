@@ -7,9 +7,11 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.bogdanorzea.bakingapp.data.database.BakingDatabase;
 import com.bogdanorzea.bakingapp.data.database.Ingredient;
+import com.bogdanorzea.bakingapp.data.database.IngredientDao;
 import com.bogdanorzea.bakingapp.data.database.Recipe;
 import com.bogdanorzea.bakingapp.data.database.RecipeDao;
 import com.bogdanorzea.bakingapp.data.database.Step;
+import com.bogdanorzea.bakingapp.data.database.StepDao;
 import com.bogdanorzea.bakingapp.util.RecipeTestUtil;
 
 import org.junit.After;
@@ -26,13 +28,17 @@ import static com.bogdanorzea.bakingapp.util.LiveDataTestUtil.getValue;
 public class SimpleDatabaseReadWriteTest {
 
     private BakingDatabase mDatabase;
-    private RecipeDao mDao;
+    private RecipeDao recipeDao;
+    private IngredientDao ingredientDao;
+    private StepDao stepDao;
 
     @Before
     public void createDb() {
         Context context = InstrumentationRegistry.getTargetContext();
         mDatabase = Room.inMemoryDatabaseBuilder(context, BakingDatabase.class).build();
-        mDao = mDatabase.getRecipeDao();
+        recipeDao = mDatabase.getRecipeDao();
+        ingredientDao = mDatabase.getIngredientDao();
+        stepDao = mDatabase.getStepDao();
     }
 
     @Test
@@ -40,22 +46,22 @@ public class SimpleDatabaseReadWriteTest {
         final int ID = 1;
 
         Recipe recipe = new Recipe(ID, "Test Recipe", 0, null);
-        Ingredient ingredient = new Ingredient(1.0, "ml", "vanilla");
+        Ingredient ingredient = new Ingredient(ID, 1.0, "ml", "vanilla");
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient);
         recipe.setIngredients(ingredients);
 
-        Step step = new Step();
-        step.setId(1);
-        step.setDescription("Long description");
-        step.setShortDescription("Short description");
+        Step step = new Step(ID, 1, "Short description", "Long description", "", "");
         List<Step> steps = new ArrayList<>();
         steps.add(step);
         recipe.setSteps(steps);
 
-        mDao.insert(recipe);
+        recipeDao.insert(recipe);
 
-        Recipe recipeById = getValue(mDao.getRecipeById(ID));
+        Recipe recipeById = getValue(recipeDao.getRecipeById(ID));
+        recipeById.setSteps(getValue(stepDao.getStepsByRecipeId(ID)));
+        recipeById.setIngredients(getValue(ingredientDao.getIngredientsByRecipeId(ID)));
+
         RecipeTestUtil.assertEquals(recipe, recipeById);
     }
 

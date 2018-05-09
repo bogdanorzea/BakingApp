@@ -1,30 +1,60 @@
 package com.bogdanorzea.bakingapp.data.database;
 
-import com.google.gson.annotations.Expose;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "steps",
+        primaryKeys = {"recipeId", "id"},
+        foreignKeys = {@ForeignKey(entity = Recipe.class,
+                parentColumns = "id",
+                childColumns = "recipeId",
+                onDelete = CASCADE)})
+
 public class Step {
+    @NonNull
+    private Integer recipeId;
+    @NonNull
     @SerializedName("id")
-    @Expose
     private Integer id;
     @SerializedName("shortDescription")
-    @Expose
     private String shortDescription;
     @SerializedName("description")
-    @Expose
     private String description;
     @SerializedName("videoURL")
-    @Expose
     private String videoURL;
     @SerializedName("thumbnailURL")
-    @Expose
     private String thumbnailURL;
 
+    public Step(@NonNull Integer recipeId, @NonNull Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+
+        this.recipeId = recipeId;
+        this.id = id;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
+    }
+
+    @NonNull
+    public Integer getRecipeId() {
+        return recipeId;
+    }
+
+    public void setRecipeId(@NonNull Integer recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    @NonNull
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(@NonNull Integer id) {
         this.id = id;
     }
 
