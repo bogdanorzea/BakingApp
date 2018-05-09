@@ -1,7 +1,6 @@
 package com.bogdanorzea.bakingapp.data.database;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
@@ -17,7 +16,6 @@ public class Recipe {
     @SerializedName("name")
     private String name;
     @Ignore
-    @ForeignKey(entity = Ingredient.class, parentColumns = "id", childColumns = "recipeId")
     @SerializedName("ingredients")
     private List<Ingredient> ingredients = null;
     @Ignore

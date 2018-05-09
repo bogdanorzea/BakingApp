@@ -1,42 +1,42 @@
 package com.bogdanorzea.bakingapp.data.database;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.ForeignKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-@Entity(tableName = "ingredients")
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "ingredients",
+        primaryKeys = {"recipeId", "name"},
+        foreignKeys = {@ForeignKey(entity = Recipe.class,
+                parentColumns = "id",
+                childColumns = "recipeId",
+                onDelete = CASCADE)})
 public class Ingredient {
-    @PrimaryKey(autoGenerate = true)
-    private Integer id;
+    @NonNull
     private Integer recipeId;
     @SerializedName("quantity")
     private Double quantity;
     @SerializedName("measure")
     private String measure;
+    @NonNull
     @SerializedName("ingredient")
     private String name;
 
-    public Ingredient(Integer recipeId, Double quantity, String measure, String name) {
+    public Ingredient(@NonNull Integer recipeId, Double quantity, @NonNull String measure, String name) {
         this.recipeId = recipeId;
         this.quantity = quantity;
         this.measure = measure;
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getRecipeId() {
         return recipeId;
     }
 
-    public void setRecipeId(Integer recipeId) {
+    public void setRecipeId(@NonNull Integer recipeId) {
         this.recipeId = recipeId;
     }
 
@@ -60,7 +60,7 @@ public class Ingredient {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(@NonNull String name) {
         this.name = name;
     }
 }
