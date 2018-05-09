@@ -5,20 +5,20 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
 
 import java.util.List;
 
 @Dao
 public interface RecipeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Recipe recipeEntity);
+    void insert(RecipeInfo recipeInfo);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void bulkInsert(List<Recipe> recipeEntities);
-
+    @Transaction
     @Query("SELECT * FROM recipes WHERE id = :id")
     LiveData<Recipe> getRecipeById(int id);
 
+    @Transaction
     @Query("SELECT * FROM recipes")
     LiveData<List<Recipe>> getRecipes();
 }

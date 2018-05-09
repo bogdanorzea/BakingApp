@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.bogdanorzea.bakingapp.AppExecutors;
-import com.bogdanorzea.bakingapp.data.database.Recipe;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ import timber.log.Timber;
 public class RecipesNetworkDataSource {
     private static final Object LOCK = new Object();
     private static RecipesNetworkDataSource sInstance;
-    private final MutableLiveData<List<Recipe>> mDownloadedRecipes;
+    private final MutableLiveData<List<RecipeResponse>> mDownloadedRecipes;
     private final Context mContext;
     private final AppExecutors mExecutors;
 
@@ -42,7 +41,7 @@ public class RecipesNetworkDataSource {
         return sInstance;
     }
 
-    public MutableLiveData<List<Recipe>> getDownloadedRecipes() {
+    public MutableLiveData<List<RecipeResponse>> getDownloadedRecipes() {
         return mDownloadedRecipes;
     }
 
@@ -58,10 +57,10 @@ public class RecipesNetworkDataSource {
 
         ResponseApiService apiService = retrofit.create(ResponseApiService.class);
 
-        Call<List<Recipe>> call = apiService.getRecipes();
-        call.enqueue(new Callback<List<Recipe>>() {
+        Call<List<RecipeResponse>> call = apiService.getRecipes();
+        call.enqueue(new Callback<List<RecipeResponse>>() {
             @Override
-            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+            public void onResponse(Call<List<RecipeResponse>> call, Response<List<RecipeResponse>> response) {
                 if (response.isSuccessful()) {
                     mDownloadedRecipes.postValue(response.body());
                 } else {
@@ -70,7 +69,7 @@ public class RecipesNetworkDataSource {
             }
 
             @Override
-            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+            public void onFailure(Call<List<RecipeResponse>> call, Throwable t) {
                 Timber.d(t.toString());
             }
         });

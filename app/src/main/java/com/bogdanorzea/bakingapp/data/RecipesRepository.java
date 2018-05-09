@@ -7,8 +7,10 @@ import com.bogdanorzea.bakingapp.data.database.Ingredient;
 import com.bogdanorzea.bakingapp.data.database.IngredientDao;
 import com.bogdanorzea.bakingapp.data.database.Recipe;
 import com.bogdanorzea.bakingapp.data.database.RecipeDao;
+import com.bogdanorzea.bakingapp.data.database.RecipeInfo;
 import com.bogdanorzea.bakingapp.data.database.Step;
 import com.bogdanorzea.bakingapp.data.database.StepDao;
+import com.bogdanorzea.bakingapp.data.network.RecipeResponse;
 import com.bogdanorzea.bakingapp.data.network.RecipesNetworkDataSource;
 
 import java.util.List;
@@ -36,27 +38,36 @@ public class RecipesRepository {
         this.mRecipesDao = recipeDao;
         this.mExecutors = executors;
 
-        LiveData<List<Recipe>> networkData = recipesNetworkDataSource.getDownloadedRecipes();
+        LiveData<List<RecipeResponse>> networkData = recipesNetworkDataSource.getDownloadedRecipes();
         networkData.observeForever(newRecipesFromNetwork -> {
             mExecutors.diskIO().execute(() -> {
-                mRecipesDao.bulkInsert(newRecipesFromNetwork);
+                if (newRecipesFromNetwork != null) {
+                    for (RecipeResponse newRecipe : newRecipesFromNetwork) {
+                        int newRecipeId = newRecipe.id;
 
-                for (Recipe newRecipe : newRecipesFromNetwork) {
-                    int newRecipeId = newRecipe.getId();
-                    List<Ingredient> ingredients = newRecipe.getIngredients();
-                    for (Ingredient ingredient : ingredients) {
-                        ingredient.setRecipeId(newRecipeId);
-                    }
-                    mIngredientsDao.bulkInsert(ingredients);
+                        // Insert recipe in database
+                        RecipeInfo recipeInfo = new RecipeInfo(newRecipeId, newRecipe.name, newRecipe.servings, newRecipe.image);
+                        mRecipesDao.insert(recipeInfo);
 
-                    List<Step> steps = newRecipe.getSteps();
-                    for (Step step : steps) {
-                        step.setRecipeId(newRecipeId);
+                        // Insert ingredients in database
+                        List<Ingredient> ingredients = newRecipe.ingredients;
+                        for (Ingredient ingredient : ingredients) {
+                            ingredient.setRecipeId(newRecipeId);
+                        }
+                        mIngredientsDao.bulkInsert(ingredients);
+
+                        // Insert steps in database
+                        List<Step> steps = newRecipe.steps;
+                        for (Step step : steps) {
+                            step.setRecipeId(newRecipeId);
+                        }
+                        mStepsDao.bulkInsert(steps);
                     }
-                    mStepsDao.bulkInsert(steps);
+
+                    Timber.i("New recipes inserted in the database");
+                } else {
+                    Timber.e("Error downloading the recipes from the server");
                 }
-
-                Timber.d("New recipes inserted in the database");
             });
         });
     }

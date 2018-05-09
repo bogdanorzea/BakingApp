@@ -15,7 +15,7 @@ class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int INGREDIENT_TYPE = 0;
     private static final int STEP_TYPE = 1;
     private final Context context;
-    private Recipe recipe;
+    private Recipe recipeEntity;
 
     public RecipeAdapter(Context context) {
         this.context = context;
@@ -41,22 +41,22 @@ class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == INGREDIENT_TYPE) {
-            ((ViewHolder) holder).mText.setText(recipe.getStringIngredients());
+            //((ViewHolder) holder).mText.setText(recipeEntity.getStringIngredients());
         } else {
-            Step currentStep = recipe.getSteps().get(position - 1);
+            Step currentStep = recipeEntity.steps.get(position - 1);
             ((ViewHolder) holder).mText.setText(currentStep.getShortDescription());
         }
     }
 
     @Override
     public int getItemCount() {
-        if (recipe == null) return 0;
+        if (recipeEntity == null) return 0;
 
-        return (recipe.getSteps().size() + 1);
+        return (recipeEntity.steps.size() + 1);
     }
 
-    public void swapIngredients(Recipe recipe) {
-        this.recipe = recipe;
+    public void swapIngredients(Recipe recipeEntity) {
+        this.recipeEntity = recipeEntity;
         notifyDataSetChanged();
     }
 

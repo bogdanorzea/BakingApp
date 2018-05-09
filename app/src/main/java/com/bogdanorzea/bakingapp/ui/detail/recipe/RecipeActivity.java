@@ -13,6 +13,9 @@ import android.view.View;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
+import com.bogdanorzea.bakingapp.data.database.Ingredient;
+
+import timber.log.Timber;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -47,15 +50,21 @@ public class RecipeActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recipe_content_list);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        RecipeAdapter mAdapter = new RecipeAdapter(this);
+        IngredientAdapter mAdapter = new IngredientAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
         if (mId != -1) {
             RecipeActivityViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, mId);
             mViewModel = ViewModelProviders.of(this, factory).get(RecipeActivityViewModel.class);
-            mViewModel.getRecipe().observe(this, newRecipe -> {
-                mAdapter.swapIngredients(newRecipe);
+            mViewModel.getIngredients().observe(this, ingredients -> {
+                for (Ingredient ingredient : ingredients) {
+                    mAdapter.swapIngredients(ingredients);
+                    Timber.d(ingredient.getName());
+                }
             });
+//            mViewModel.getRecipe().observe(this, newRecipe -> {
+//                mAdapter.swapIngredients(newRecipe);
+//            });
         }
     }
 
