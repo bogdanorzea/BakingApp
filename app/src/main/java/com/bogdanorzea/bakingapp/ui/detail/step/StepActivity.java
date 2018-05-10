@@ -11,6 +11,8 @@ import com.bogdanorzea.bakingapp.R;
 
 public class StepActivity extends AppCompatActivity {
 
+    public static final String RECIPE_ID = "recipe_id";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

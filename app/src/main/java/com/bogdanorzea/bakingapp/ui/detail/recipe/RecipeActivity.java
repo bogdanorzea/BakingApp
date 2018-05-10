@@ -13,11 +13,11 @@ import android.view.View;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
-import com.bogdanorzea.bakingapp.data.database.Ingredient;
+import com.bogdanorzea.bakingapp.ui.detail.step.StepActivity;
 
 import timber.log.Timber;
 
-public class RecipeActivity extends AppCompatActivity {
+public class RecipeActivity extends AppCompatActivity implements StepAdapter.OnItemClickHandler {
 
     public static final String RECIPE_ID = "RECIPE_ID";
     private int mId = -1;
@@ -50,22 +50,29 @@ public class RecipeActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recipe_content_list);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        IngredientAdapter mAdapter = new IngredientAdapter(this);
-        recyclerView.setAdapter(mAdapter);
+        //IngredientAdapter adapter = new IngredientAdapter(this);
+        StepAdapter adapter = new StepAdapter(this, this);
+        recyclerView.setAdapter(adapter);
 
         if (mId != -1) {
             RecipeActivityViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, mId);
             mViewModel = ViewModelProviders.of(this, factory).get(RecipeActivityViewModel.class);
-            mViewModel.getIngredients().observe(this, ingredients -> {
-                for (Ingredient ingredient : ingredients) {
-                    mAdapter.swapIngredients(ingredients);
-                    Timber.d(ingredient.getName());
-                }
-            });
-//            mViewModel.getRecipe().observe(this, newRecipe -> {
-//                mAdapter.swapIngredients(newRecipe);
+//            mViewModel.getIngredients().observe(this, ingredients -> {
+//                adapter.swapIngredients(ingredients);
 //            });
+            mViewModel.getRecipe().observe(this, newRecipe -> {
+                adapter.swapSteps(newRecipe.steps);
+            });
         }
     }
 
+    @Override
+    public void onItemClick(int stepId) {
+        Timber.d("Step at position %s was clicked", stepId);
+
+        Intent intent = new Intent(this, StepActivity.class);
+        intent.putExtra(StepActivity.RECIPE_ID, mId);
+
+        startActivity(intent);
+    }
 }
