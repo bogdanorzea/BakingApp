@@ -72,6 +72,7 @@ public class RecipeActivity extends AppCompatActivity implements StepAdapter.OnI
 
         Intent intent = new Intent(this, StepActivity.class);
         intent.putExtra(StepActivity.RECIPE_ID, mId);
+        intent.putExtra(StepActivity.STEP_ID, stepId);
 
         startActivity(intent);
     }
