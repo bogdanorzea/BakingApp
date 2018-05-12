@@ -35,10 +35,12 @@ public class StepActivityFragment extends Fragment {
     private static final String PLAYER_PLAY_WHEN_READY = "player_playback_state";
     private static final String PLAYER_CURRENT_POSITION = "player_current_position";
     private static final String PLAYER_CURRENT_WINDOW_INDEX = "player_current_window_index";
+
     private ExoPlayer exoPlayer;
+    private PlayerView playerView;
+
     private long playbackPosition = 0;
     private boolean playWhenReady = true;
-    private PlayerView playerView;
     private int currentWindowIndex;
 
     public StepActivityFragment() {

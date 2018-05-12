@@ -37,13 +37,12 @@ public class StepActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        if (intent == null) finish();
-
-        if (intent.hasExtra(RECIPE_ID)) {
+        if (intent != null && intent.hasExtra(RECIPE_ID) && intent.hasExtra(STEP_ID)) {
             recipeId = intent.getIntExtra(RECIPE_ID, -1);
             stepId = intent.getIntExtra(STEP_ID, -1);
+        } else {
+            finish();
         }
-        if (recipeId == -1 || stepId == -1) finish();
 
         if (savedInstanceState == null) {
             StepActivityFragment stepActivityFragment = new StepActivityFragment();
@@ -51,7 +50,6 @@ public class StepActivity extends AppCompatActivity {
             Bundle bundle = new Bundle();
             bundle.putInt(StepActivityFragment.RECIPE_ID, recipeId);
             bundle.putInt(StepActivityFragment.STEP_ID, stepId);
-
             stepActivityFragment.setArguments(bundle);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
