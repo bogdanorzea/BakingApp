@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.step.StepActivityFragment"
+    tools:context=".ui.detail.StepActivityFragment"
     tools:showIn="@layout/activity_step">
 
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView

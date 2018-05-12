@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui.detail.recipe;
+package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -15,9 +15,9 @@ import java.util.List;
 class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Context context;
     private List<Step> steps;
-    private OnItemClickHandler handler;
+    private OnStepItemClickHandler handler;
 
-    StepAdapter(Context context, OnItemClickHandler handler) {
+    StepAdapter(Context context, OnStepItemClickHandler handler) {
         this.context = context;
         this.handler = handler;
     }
@@ -47,8 +47,8 @@ class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged();
     }
 
-    public interface OnItemClickHandler {
-        void onItemClick(int stepId);
+    public interface OnStepItemClickHandler {
+        void onStepItemClick(int stepId);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -63,7 +63,7 @@ class StepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            handler.onItemClick(steps.get(getAdapterPosition()).getId());
+            handler.onStepItemClick(steps.get(getAdapterPosition()).getId());
         }
     }
 }

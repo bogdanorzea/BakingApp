@@ -1,9 +1,9 @@
-package com.bogdanorzea.bakingapp.ui.detail.recipe;
+package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,21 +14,31 @@ import android.widget.Toast;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
-import com.bogdanorzea.bakingapp.ui.detail.step.StepActivity;
 
 import timber.log.Timber;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class RecipeActivityFragment extends Fragment
-        implements StepAdapter.OnItemClickHandler {
+public class RecipeActivityFragment extends Fragment {
 
     public static final String RECIPE_ID = "RECIPE_ID";
     private RecipeActivityViewModel viewModel;
-    private int recipeId;
+    private int recipeId = -1;
+    private StepAdapter.OnStepItemClickHandler onStepItemClickListener;
 
     public RecipeActivityFragment() {
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            onStepItemClickListener = (StepAdapter.OnStepItemClickHandler) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnStepItemClickListener");
+        }
     }
 
     @Override
@@ -42,14 +52,11 @@ public class RecipeActivityFragment extends Fragment
         RecyclerView recyclerView = view.findViewById(R.id.recipe_content_list);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        StepAdapter adapter = new StepAdapter(context, this);
+        StepAdapter adapter = new StepAdapter(context, onStepItemClickListener);
         recyclerView.setAdapter(adapter);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            recipeId = bundle.getInt(RECIPE_ID, -1);
-
-            Toast.makeText(getContext(), "" + recipeId, Toast.LENGTH_SHORT).show();
+        if (savedInstanceState != null) {
+            recipeId = savedInstanceState.getInt(RECIPE_ID);
         }
 
         if (recipeId != -1) {
@@ -58,20 +65,21 @@ public class RecipeActivityFragment extends Fragment
             viewModel.getRecipe().observe(this, newRecipe -> {
                 adapter.swapSteps(newRecipe.steps);
             });
+        } else {
+            Timber.e("Invalid recipe id");
+            Toast.makeText(context, "Invalid recipe id", Toast.LENGTH_SHORT).show();
         }
 
         return view;
     }
 
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
+
     @Override
-    public void onItemClick(int stepId) {
-        Timber.d("Step at position %s was clicked", stepId);
-        Context context = getContext();
-
-        Intent intent = new Intent(context, StepActivity.class);
-        intent.putExtra(StepActivity.RECIPE_ID, recipeId);
-        intent.putExtra(StepActivity.STEP_ID, stepId);
-
-        startActivity(intent);
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(RECIPE_ID, recipeId);
     }
 }

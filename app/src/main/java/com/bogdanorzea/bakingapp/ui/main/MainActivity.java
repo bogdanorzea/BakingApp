@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
-import com.bogdanorzea.bakingapp.ui.detail.recipe.RecipeActivity;
+import com.bogdanorzea.bakingapp.ui.detail.RecipeActivity;
 
 import timber.log.Timber;
 

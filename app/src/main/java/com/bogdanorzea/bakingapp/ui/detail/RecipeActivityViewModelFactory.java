@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui.detail.recipe;
+package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;

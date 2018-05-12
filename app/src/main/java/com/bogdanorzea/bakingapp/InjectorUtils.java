@@ -5,7 +5,7 @@ import android.content.Context;
 import com.bogdanorzea.bakingapp.data.RecipesRepository;
 import com.bogdanorzea.bakingapp.data.database.BakingDatabase;
 import com.bogdanorzea.bakingapp.data.network.RecipesNetworkDataSource;
-import com.bogdanorzea.bakingapp.ui.detail.recipe.RecipeActivityViewModelFactory;
+import com.bogdanorzea.bakingapp.ui.detail.RecipeActivityViewModelFactory;
 import com.bogdanorzea.bakingapp.ui.main.MainActivityViewModelFactory;
 
 public class InjectorUtils {

@@ -1,4 +1,4 @@
-package com.bogdanorzea.bakingapp.ui.detail.step;
+package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,7 +10,6 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.bogdanorzea.bakingapp.BakingApp;
 import com.bogdanorzea.bakingapp.R;
@@ -53,6 +52,8 @@ public class StepActivityFragment extends Fragment implements Player.EventListen
     private int currentWindowIndex;
     private MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder stateBuilder;
+    private int recipeId;
+    private int stepId;
 
     public StepActivityFragment() {
     }
@@ -67,14 +68,6 @@ public class StepActivityFragment extends Fragment implements Player.EventListen
             playWhenReady = savedInstanceState.getBoolean(PLAYER_PLAY_WHEN_READY);
             playbackPosition = savedInstanceState.getLong(PLAYER_CURRENT_POSITION);
             currentWindowIndex = savedInstanceState.getInt(PLAYER_CURRENT_WINDOW_INDEX);
-        }
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            int recipeId = bundle.getInt(RECIPE_ID, -1);
-            int stepId = bundle.getInt(STEP_ID, -1);
-
-            Toast.makeText(getContext(), recipeId + " & " + stepId, Toast.LENGTH_SHORT).show();
         }
 
         createMediaSession();
@@ -218,6 +211,14 @@ public class StepActivityFragment extends Fragment implements Player.EventListen
         mediaSession.release();
         RefWatcher refWatcher = BakingApp.getRefWatcher(getActivity());
         refWatcher.watch(this);
+    }
+
+    public void setRecipeId(int recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    public void setStepId(int stepId) {
+        this.stepId = stepId;
     }
 
     private class StepSessionCallback extends MediaSessionCompat.Callback {
