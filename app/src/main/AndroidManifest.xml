@@ -27,6 +27,7 @@
         <activity
             android:name=".ui.detail.recipe.RecipeActivity"
             android:label="@string/title_activity_detail"
+            android:launchMode="singleTask"
             android:parentActivityName=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -36,6 +37,7 @@
         <activity
             android:name=".ui.detail.step.StepActivity"
             android:label="@string/title_activity_step"
+            android:launchMode="singleTask"
             android:parentActivityName=".ui.detail.recipe.RecipeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
