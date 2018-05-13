@@ -8,16 +8,16 @@ import com.bogdanorzea.bakingapp.data.database.Recipe;
 
 import java.util.List;
 
-public class MainActivityViewModel extends ViewModel {
-    private RecipesRepository mRepository;
-    private LiveData<List<Recipe>> mRecipes;
+public class RecipeListViewModel extends ViewModel {
+    private RecipesRepository repository;
+    private LiveData<List<Recipe>> recipes;
 
-    public MainActivityViewModel(RecipesRepository repository) {
-        this.mRepository = repository;
-        this.mRecipes = mRepository.getRecipes();
+    public RecipeListViewModel(RecipesRepository repository) {
+        this.repository = repository;
+        this.recipes = this.repository.getRecipes();
     }
 
     public LiveData<List<Recipe>> getRecipes() {
-        return mRecipes;
+        return recipes;
     }
 }

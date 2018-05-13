@@ -1,0 +1,68 @@
+package com.bogdanorzea.bakingapp.ui.detail;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+
+import com.bogdanorzea.bakingapp.R;
+
+public class StepDetailActivity extends AppCompatActivity {
+
+    public static final String RECIPE_ID = "recipe_id";
+    public static final String STEP_ID = "step_id";
+
+    private int recipeId;
+    private int stepId;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_step_detail);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Show the Up button in the action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(RECIPE_ID) && intent.hasExtra(STEP_ID)) {
+            recipeId = intent.getIntExtra(RECIPE_ID, -1);
+            stepId = intent.getIntExtra(STEP_ID, -1);
+        } else {
+            finish();
+        }
+
+        if (savedInstanceState == null) {
+            StepDetailFragment stepActivityFragment = new StepDetailFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putInt(StepDetailFragment.RECIPE_ID, recipeId);
+            bundle.putInt(StepDetailFragment.STEP_ID, stepId);
+            stepActivityFragment.setArguments(bundle);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.fragment_step_details, stepActivityFragment, "FRAGMENT_STEP")
+                    .commit();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            NavUtils.navigateUpTo(this, new Intent(this, StepListActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+}

@@ -5,8 +5,9 @@ import android.content.Context;
 import com.bogdanorzea.bakingapp.data.RecipesRepository;
 import com.bogdanorzea.bakingapp.data.database.BakingDatabase;
 import com.bogdanorzea.bakingapp.data.network.RecipesNetworkDataSource;
-import com.bogdanorzea.bakingapp.ui.detail.RecipeActivityViewModelFactory;
-import com.bogdanorzea.bakingapp.ui.main.MainActivityViewModelFactory;
+import com.bogdanorzea.bakingapp.ui.detail.StepDetailViewModelFactory;
+import com.bogdanorzea.bakingapp.ui.detail.StepListViewModelFactory;
+import com.bogdanorzea.bakingapp.ui.main.RecipeListViewModelFactory;
 
 public class InjectorUtils {
     public static RecipesNetworkDataSource provideNetworkDataSource(Context context) {
@@ -24,15 +25,21 @@ public class InjectorUtils {
         return RecipesRepository.getInstance(executors, db.getRecipeDao(), db.getIngredientDao(), db.getStepDao(), recipesNetworkDataSource);
     }
 
-    public static MainActivityViewModelFactory provideMainViewViewModelFactory(Context context) {
+    public static RecipeListViewModelFactory provideMainViewViewModelFactory(Context context) {
         RecipesRepository repository = provideRecipesRepository(context.getApplicationContext());
 
-        return new MainActivityViewModelFactory(repository);
+        return new RecipeListViewModelFactory(repository);
     }
 
-    public static RecipeActivityViewModelFactory provideDetailViewModelFactory(Context context, int id) {
+    public static StepListViewModelFactory provideDetailViewModelFactory(Context context, int id) {
         RecipesRepository repository = provideRecipesRepository(context.getApplicationContext());
 
-        return new RecipeActivityViewModelFactory(repository, id);
+        return new StepListViewModelFactory(repository, id);
+    }
+
+    public static StepDetailViewModelFactory provideStepDetailViewModelFactory(Context context, int recipeId, int stepId) {
+        RecipesRepository repository = provideRecipesRepository(context.getApplicationContext());
+
+        return new StepDetailViewModelFactory(repository, recipeId, stepId);
     }
 }

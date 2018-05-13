@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.StepActivityFragment"
-    tools:showIn="@layout/activity_step">
+    tools:context=".ui.detail.StepListActivity"
+    tools:showIn="@layout/activity_step_list">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/player"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recipe_content_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>

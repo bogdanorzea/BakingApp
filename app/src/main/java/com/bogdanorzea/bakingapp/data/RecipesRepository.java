@@ -98,6 +98,14 @@ public class RecipesRepository {
         return mIngredientsDao.getIngredientsByRecipeId(recipeId);
     }
 
+    public LiveData<List<Step>> getStepsByRecipeId(int recipeId) {
+        return mStepsDao.getStepsByRecipeId(recipeId);
+    }
+
+    public LiveData<Step> getStepByRecipeIdStepId(int recipeId, int stepId) {
+        return mStepsDao.getStepsByRecipeIdStepId(recipeId, stepId);
+    }
+
     private void initialize() {
         if (mInitialized) return;
         mInitialized = true;

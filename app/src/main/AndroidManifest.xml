@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.main.RecipeListActivity"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,14 +25,23 @@
         <service android:name=".data.network.RecipesSyncIntentService" />
 
         <activity
-            android:name=".ui.detail.RecipeActivity"
+            android:name=".ui.detail.StepListActivity"
             android:label="@string/title_activity_detail"
             android:launchMode="singleTask"
-            android:parentActivityName=".ui.main.MainActivity"
+            android:parentActivityName=".ui.main.RecipeListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bogdanorzea.bakingapp.ui.main.MainActivity" />
+                android:value="com.bogdanorzea.bakingapp.ui.main.RecipeListActivity" />
+        </activity>
+        <activity
+            android:name=".ui.detail.StepDetailActivity"
+            android:label="@string/title_step_detail"
+            android:parentActivityName=".ui.detail.StepListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bogdanorzea.bakingapp.ui.detail.StepListActivity" />
         </activity>
     </application>
 

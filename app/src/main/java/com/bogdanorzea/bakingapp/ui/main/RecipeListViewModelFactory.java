@@ -5,16 +5,16 @@ import android.arch.lifecycle.ViewModelProvider;
 
 import com.bogdanorzea.bakingapp.data.RecipesRepository;
 
-public class MainActivityViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private final RecipesRepository mRepository;
+public class RecipeListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+    private final RecipesRepository repository;
 
-    public MainActivityViewModelFactory(RecipesRepository repository) {
-        this.mRepository = repository;
+    public RecipeListViewModelFactory(RecipesRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new MainActivityViewModel(mRepository);
+        return (T) new RecipeListViewModel(repository);
     }
 }

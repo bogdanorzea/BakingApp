@@ -6,19 +6,19 @@ import android.support.annotation.NonNull;
 
 import com.bogdanorzea.bakingapp.data.RecipesRepository;
 
-public class RecipeActivityViewModelFactory extends ViewModelProvider.NewInstanceFactory {
-    private final RecipesRepository mRepository;
-    private int mId;
+public class StepListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+    private final RecipesRepository repository;
+    private int recipeId;
 
-    public RecipeActivityViewModelFactory(RecipesRepository repository, int id) {
-        this.mRepository = repository;
-        this.mId = id;
+    public StepListViewModelFactory(RecipesRepository repository, int id) {
+        this.repository = repository;
+        this.recipeId = id;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new RecipeActivityViewModel(mRepository, mId);
+        return (T) new StepListViewModel(repository, recipeId);
     }
 }
