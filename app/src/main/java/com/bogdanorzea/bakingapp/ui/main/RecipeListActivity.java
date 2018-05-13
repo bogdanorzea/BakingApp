@@ -47,7 +47,7 @@ public class RecipeListActivity extends AppCompatActivity {
         });
     }
 
-    static class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
+    public static class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
         private final Context mContext;
         private List<Recipe> mRecipes;
         private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -63,7 +63,7 @@ public class RecipeListActivity extends AppCompatActivity {
             }
         };
 
-        RecipesAdapter(Context context) {
+        public RecipesAdapter(Context context) {
             mContext = context;
         }
 
@@ -92,7 +92,7 @@ public class RecipeListActivity extends AppCompatActivity {
             return mRecipes.size();
         }
 
-        void swapRecipes(List<Recipe> recipes) {
+        public void swapRecipes(List<Recipe> recipes) {
             mRecipes = recipes;
             notifyDataSetChanged();
         }

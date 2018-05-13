@@ -15,4 +15,16 @@ public class Recipe extends RecipeInfo {
     public Recipe(Integer id, String name, Integer servings, String image) {
         super(id, name, servings, image);
     }
+
+    public String getStringIngredients() {
+        StringBuffer buffer = new StringBuffer("");
+
+        if (ingredients != null) {
+            for (Ingredient ingredient : ingredients) {
+                buffer.append(ingredient.getName()).append('\n');
+            }
+        }
+
+        return buffer.toString().trim();
+    }
 }
