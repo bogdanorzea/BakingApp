@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ public class StepListActivity extends AppCompatActivity {
     public static final String RECIPE_ID = "RECIPE_ID";
     private StepListViewModel viewModel;
     private int recipeId = -1;
+    private boolean isTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +46,13 @@ public class StepListActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        RecyclerView recyclerView = findViewById(R.id.recipe_content_list);
+        // If this view is present, then the activity should be in two-pane mode.
+        isTwoPane = findViewById(R.id.step_details_container) != null;
+
+        RecyclerView recyclerView = findViewById(R.id.step_list);
         recyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        StepListActivity.StepAdapter adapter = new StepListActivity.StepAdapter(this, false);
+        StepListActivity.StepAdapter adapter = new StepListActivity.StepAdapter(this, isTwoPane);
         recyclerView.setAdapter(adapter);
 
         Intent intent = getIntent();
@@ -77,17 +82,22 @@ public class StepListActivity extends AppCompatActivity {
                 Timber.d("Step at position %s was clicked", step.getId());
 
                 if (isTwoPane) {
-//                    StepDetailFragment stepDetailFragment = new StepDetailFragment();
-//                    stepDetailFragment.setRecipeId(step.getRecipeId());
-//                    stepDetailFragment.setStepId(step.getId());
-//
-//                    FragmentManager fragmentManager = parentActivity.getSupportFragmentManager();
-//                    fragmentManager.beginTransaction()
-//                            .replace(R.id.fragment_recipe_details, stepDetailFragment, "FRAGMENT_STEP")
-//                            .addToBackStack(null)
-//                            .commit();
+                    Timber.d("Replacing fragment to show details for Step#%s", step.getId());
+
+                    StepDetailFragment stepDetailFragment = new StepDetailFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(StepDetailFragment.RECIPE_ID, step.getRecipeId());
+                    bundle.putInt(StepDetailFragment.STEP_ID, step.getId());
+                    stepDetailFragment.setArguments(bundle);
+
+                    FragmentManager fragmentManager = parentActivity.getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.step_details_container, stepDetailFragment, "FRAGMENT_STEP")
+                            .commit();
+
                 } else {
-                    Timber.d("Step at position %s was clicked", step.getId());
+                    Timber.d("Starting activity to show details for Step#%s", step.getId());
 
                     Intent intent = new Intent(parentActivity, StepDetailActivity.class);
                     intent.putExtra(StepDetailActivity.RECIPE_ID, step.getRecipeId());

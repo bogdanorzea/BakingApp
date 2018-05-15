@@ -50,7 +50,7 @@ public class StepDetailActivity extends AppCompatActivity {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_step_details, stepActivityFragment, "FRAGMENT_STEP")
+                    .add(R.id.step_details_container, stepActivityFragment, "FRAGMENT_STEP")
                     .commit();
         }
     }

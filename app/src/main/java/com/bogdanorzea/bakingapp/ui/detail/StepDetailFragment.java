@@ -125,7 +125,7 @@ public class StepDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.step_list_item, container, false);
+        View view = inflater.inflate(R.layout.step_item_details, container, false);
         playerView = view.findViewById(R.id.player);
 
         if (savedInstanceState != null) {
@@ -164,6 +164,7 @@ public class StepDetailFragment extends Fragment {
 
     private void createMediaSession() {
         Context context = getContext();
+        if (context == null) return;
 
         mediaSession = new MediaSessionCompat(context, STEP_MEDIA_SESSION);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
@@ -216,14 +217,14 @@ public class StepDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         initializePlayer();
-        mediaSession.setActive(true);
+        if (mediaSession != null) mediaSession.setActive(true);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         releasePlayer();
-        mediaSession.setActive(false);
+        if (mediaSession != null) mediaSession.setActive(false);
     }
 
     private void releasePlayer() {
@@ -240,15 +241,17 @@ public class StepDetailFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(PLAYER_PLAY_WHEN_READY, exoPlayer.getPlayWhenReady());
-        outState.putLong(PLAYER_CURRENT_POSITION, exoPlayer.getCurrentPosition());
-        outState.putInt(PLAYER_CURRENT_WINDOW_INDEX, exoPlayer.getCurrentWindowIndex());
+        if (exoPlayer != null) {
+            outState.putBoolean(PLAYER_PLAY_WHEN_READY, exoPlayer.getPlayWhenReady());
+            outState.putLong(PLAYER_CURRENT_POSITION, exoPlayer.getCurrentPosition());
+            outState.putInt(PLAYER_CURRENT_WINDOW_INDEX, exoPlayer.getCurrentWindowIndex());
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mediaSession.release();
+        if (mediaSession != null) mediaSession.release();
         RefWatcher refWatcher = BakingApp.getRefWatcher(getActivity());
         refWatcher.watch(this);
     }
