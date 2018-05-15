@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bogdanorzea.bakingapp.BakingApp;
@@ -147,6 +148,9 @@ public class StepDetailFragment extends Fragment {
                 viewModel.getStep().observe(this, newStep -> {
                     step = newStep;
                     initializePlayer();
+
+                    ((TextView) view.findViewById(R.id.step_description_text))
+                            .setText(step.getDescription());
                 });
             } else {
                 Timber.e("Invalid recipe");
