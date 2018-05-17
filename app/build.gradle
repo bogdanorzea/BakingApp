@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'

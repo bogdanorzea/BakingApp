@@ -30,7 +30,8 @@
             android:id="@+id/recipe_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.main.RecipeListActivity" />
+            tools:context=".ui.main.RecipeListActivity"
+            tools:listitem="@layout/activity_recipe_list_item"/>
     </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

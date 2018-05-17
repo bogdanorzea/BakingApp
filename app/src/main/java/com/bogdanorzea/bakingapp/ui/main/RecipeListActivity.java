@@ -6,18 +6,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
 import com.bogdanorzea.bakingapp.data.database.Recipe;
 import com.bogdanorzea.bakingapp.ui.detail.StepListActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -37,8 +41,14 @@ public class RecipeListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView mRecyclerView = findViewById(R.id.recipe_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+                layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                layoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         mAdapter = new RecipesAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -74,7 +84,7 @@ public class RecipeListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(mContext)
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+                    .inflate(R.layout.activity_recipe_list_item, parent, false);
 
             return new ViewHolder(view);
         }
@@ -83,7 +93,17 @@ public class RecipeListActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Recipe currentRecipe = mRecipes.get(position);
 
-            holder.mText.setText(currentRecipe.getName());
+            holder.textView.setText(currentRecipe.getName());
+            String imagePath = currentRecipe.getImage();
+            if (!TextUtils.isEmpty(imagePath)) {
+                Picasso.get().load(imagePath)
+                        .error(R.drawable.cookie)
+                        .into(holder.imageView);
+            } else {
+                Picasso.get().load(R.drawable.cookie)
+                        .into(holder.imageView);
+            }
+
             holder.itemView.setOnClickListener(onClickListener);
             holder.itemView.setTag(currentRecipe);
         }
@@ -101,12 +121,14 @@ public class RecipeListActivity extends AppCompatActivity {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            private final TextView mText;
+            private final TextView textView;
+            private final ImageView imageView;
 
             ViewHolder(View itemView) {
                 super(itemView);
 
-                mText = itemView.findViewById(android.R.id.text1);
+                textView = itemView.findViewById(R.id.recipe_name);
+                imageView = itemView.findViewById(R.id.recipe_image);
             }
         }
     }
