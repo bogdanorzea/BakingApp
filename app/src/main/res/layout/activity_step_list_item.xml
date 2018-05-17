@@ -9,14 +9,17 @@
     android:paddingRight="16dp"
     android:paddingTop="8dp">
 
-    <ImageView
-        android:id="@+id/recipe_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        tools:src="@drawable/cookie" />
+    <TextView
+        android:id="@+id/step_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:textSize="24sp"
+        tools:text="1" />
 
     <TextView
-        android:id="@+id/recipe_name"
+        android:id="@+id/step_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -24,6 +27,6 @@
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
         android:textSize="24sp"
-        tools:text="Recipe Name" />
+        tools:text="Step name" />
 
 </LinearLayout>

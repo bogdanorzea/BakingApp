@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -50,8 +51,14 @@ public class StepListActivity extends AppCompatActivity {
         isTwoPane = findViewById(R.id.step_details_container) != null;
 
         RecyclerView recyclerView = findViewById(R.id.step_list);
-        recyclerView.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+
         StepListActivity.StepAdapter adapter = new StepListActivity.StepAdapter(this, isTwoPane);
         recyclerView.setAdapter(adapter);
 
@@ -117,7 +124,7 @@ public class StepListActivity extends AppCompatActivity {
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parentActivity)
-                    .inflate(android.R.layout.simple_list_item_1, parent, false);
+                    .inflate(R.layout.activity_step_list_item, parent, false);
             return new ViewHolder(view);
         }
 
@@ -125,7 +132,8 @@ public class StepListActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             Step currentStep = steps.get(position);
 
-            holder.mText.setText(currentStep.getShortDescription());
+            holder.stepName.setText(currentStep.getShortDescription());
+            holder.stepId.setText(currentStep.getId().toString());
 
             holder.itemView.setTag(currentStep);
             holder.itemView.setOnClickListener(onClickListener);
@@ -144,12 +152,14 @@ public class StepListActivity extends AppCompatActivity {
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            TextView mText;
+            final TextView stepId;
+            final TextView stepName;
 
             ViewHolder(View itemView) {
                 super(itemView);
 
-                mText = itemView.findViewById(android.R.id.text1);
+                stepName = itemView.findViewById(R.id.step_name);
+                stepId = itemView.findViewById(R.id.step_id);
             }
         }
     }

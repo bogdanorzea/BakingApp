@@ -32,7 +32,6 @@ public class RecipeListActivity extends AppCompatActivity {
     private RecipeListViewModel mViewModel;
     private RecipesAdapter mAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,29 +60,29 @@ public class RecipeListActivity extends AppCompatActivity {
     }
 
     public static class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.ViewHolder> {
-        private final Context mContext;
-        private List<Recipe> mRecipes;
+        private final Context context;
+        private List<Recipe> recipes;
         private View.OnClickListener onClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Recipe recipe = (Recipe) v.getTag();
                 Timber.d("Recipe at position %s was clicked", recipe.getId());
 
-                Intent intent = new Intent(mContext, StepListActivity.class);
+                Intent intent = new Intent(context, StepListActivity.class);
                 intent.putExtra(StepListActivity.RECIPE_ID, recipe.getId());
 
-                mContext.startActivity(intent);
+                context.startActivity(intent);
             }
         };
 
         public RecipesAdapter(Context context) {
-            mContext = context;
+            this.context = context;
         }
 
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(mContext)
+            View view = LayoutInflater.from(context)
                     .inflate(R.layout.activity_recipe_list_item, parent, false);
 
             return new ViewHolder(view);
@@ -91,17 +90,17 @@ public class RecipeListActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Recipe currentRecipe = mRecipes.get(position);
+            Recipe currentRecipe = recipes.get(position);
 
-            holder.textView.setText(currentRecipe.getName());
+            holder.recipeName.setText(currentRecipe.getName());
             String imagePath = currentRecipe.getImage();
             if (!TextUtils.isEmpty(imagePath)) {
                 Picasso.get().load(imagePath)
                         .error(R.drawable.cookie)
-                        .into(holder.imageView);
+                        .into(holder.recipeImage);
             } else {
                 Picasso.get().load(R.drawable.cookie)
-                        .into(holder.imageView);
+                        .into(holder.recipeImage);
             }
 
             holder.itemView.setOnClickListener(onClickListener);
@@ -110,25 +109,25 @@ public class RecipeListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            if (mRecipes == null) return 0;
+            if (recipes == null) return 0;
 
-            return mRecipes.size();
+            return recipes.size();
         }
 
         public void swapRecipes(List<Recipe> recipes) {
-            mRecipes = recipes;
+            this.recipes = recipes;
             notifyDataSetChanged();
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            private final TextView textView;
-            private final ImageView imageView;
+            private final TextView recipeName;
+            private final ImageView recipeImage;
 
             ViewHolder(View itemView) {
                 super(itemView);
 
-                textView = itemView.findViewById(R.id.recipe_name);
-                imageView = itemView.findViewById(R.id.recipe_image);
+                recipeName = itemView.findViewById(R.id.recipe_name);
+                recipeImage = itemView.findViewById(R.id.recipe_image);
             }
         }
     }
