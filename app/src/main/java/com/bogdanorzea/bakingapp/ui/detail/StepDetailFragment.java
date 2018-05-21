@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bogdanorzea.bakingapp.BakingApp;
 import com.bogdanorzea.bakingapp.InjectorUtils;
@@ -147,7 +148,12 @@ public class StepDetailFragment extends Fragment {
                 viewModel.getRecipe().observe(this, recipe -> {
                     if (recipe != null) {
                         step = recipe.steps.get(stepId);
-                        initializePlayer();
+
+                        if (!TextUtils.isEmpty(step.getVideoURL())) {
+                            initializePlayer();
+                        } else {
+                            Toast.makeText(getContext(), "Could not play the clip", Toast.LENGTH_SHORT).show();
+                        }
 
                         ((TextView) view.findViewById(R.id.step_description_text))
                                 .setText(step.getDescription());
