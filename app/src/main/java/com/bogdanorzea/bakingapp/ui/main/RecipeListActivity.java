@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +27,8 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 public class RecipeListActivity extends AppCompatActivity {
 
     private RecipeListViewModel mViewModel;
@@ -40,10 +42,14 @@ public class RecipeListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView mRecyclerView = findViewById(R.id.recipe_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(
-                layoutManager);
+        if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+            GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+            mRecyclerView.setLayoutManager(layoutManager);
+        } else {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                    LinearLayoutManager.VERTICAL, false);
+            mRecyclerView.setLayoutManager(layoutManager);
+        }
 
         mAdapter = new RecipesAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
