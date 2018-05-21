@@ -26,6 +26,7 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
                 // Construct the RemoteViews object
                 RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.ingredients_widget);
                 views.setTextViewText(R.id.ingredient_list_text, recipe.getStringIngredients());
+                views.setTextViewText(R.id.recipe_name_text, recipe.getName() + " ingredients");
 
                 // Create PendingIntent to launch the Recipe detail activity
                 Intent intent = new Intent(context, StepListActivity.class);
