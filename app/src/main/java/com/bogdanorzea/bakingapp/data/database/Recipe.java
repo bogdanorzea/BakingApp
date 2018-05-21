@@ -21,7 +21,13 @@ public class Recipe extends RecipeInfo {
 
         if (ingredients != null) {
             for (Ingredient ingredient : ingredients) {
-                buffer.append(ingredient.getName()).append('\n');
+                buffer.append("• ")
+                        .append(ingredient.getName())
+                        .append(" — ")
+                        .append(ingredient.getQuantity())
+                        .append(" ")
+                        .append(ingredient.getMeasure())
+                        .append('\n');
             }
         }
 

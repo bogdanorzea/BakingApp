@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,7 +29,7 @@ import timber.log.Timber;
 public class StepListActivity extends AppCompatActivity {
 
     public static final String RECIPE_ID = "RECIPE_ID";
-    private StepListViewModel viewModel;
+    private RecipeViewModel viewModel;
     private int recipeId = -1;
     private boolean isTwoPane;
 
@@ -53,11 +52,7 @@ public class StepListActivity extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.step_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                layoutManager.getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
-
+        recyclerView.setNestedScrollingEnabled(false);
 
         StepListActivity.StepAdapter adapter = new StepListActivity.StepAdapter(this, isTwoPane);
         recyclerView.setAdapter(adapter);
@@ -67,9 +62,18 @@ public class StepListActivity extends AppCompatActivity {
             recipeId = intent.getIntExtra(RECIPE_ID, -1);
 
             if (recipeId != -1) {
-                StepListViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, recipeId);
-                viewModel = ViewModelProviders.of(this, factory).get(StepListViewModel.class);
-                viewModel.getSteps().observe(this, steps -> adapter.swapSteps(steps));
+                RecipeViewModelFactory factory = InjectorUtils.provideDetailViewModelFactory(this, recipeId);
+                viewModel = ViewModelProviders.of(this, factory).get(RecipeViewModel.class);
+                viewModel.getRecipe().observe(this, recipe -> {
+                    if (recipe != null) {
+                        setTitle(recipe.getName());
+
+                        ((TextView) findViewById(R.id.ingredients_text))
+                                .setText(recipe.getStringIngredients());
+
+                        adapter.swapSteps(recipe.steps);
+                    }
+                });
             } else {
                 Timber.e("Invalid recipe id");
                 Toast.makeText(this, "Invalid recipe id", Toast.LENGTH_SHORT).show();

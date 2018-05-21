@@ -116,7 +116,7 @@ public class StepDetailFragment extends Fragment {
     };
     private int recipeId;
     private int stepId;
-    private StepDetailViewModel viewModel;
+    private RecipeViewModel viewModel;
     private Step step;
 
     public StepDetailFragment() {
@@ -142,15 +142,22 @@ public class StepDetailFragment extends Fragment {
             Toast.makeText(getContext(), recipeId + " & " + stepId, Toast.LENGTH_SHORT).show();
 
             if (recipeId != -1 && stepId != -1) {
-                StepDetailViewModelFactory factory =
-                        InjectorUtils.provideStepDetailViewModelFactory(getContext(), recipeId, stepId);
-                viewModel = ViewModelProviders.of(this, factory).get(StepDetailViewModel.class);
-                viewModel.getStep().observe(this, newStep -> {
-                    step = newStep;
-                    initializePlayer();
+                RecipeViewModelFactory factory =
+                        InjectorUtils.provideDetailViewModelFactory(getContext(), recipeId);
+                viewModel = ViewModelProviders.of(this, factory).get(RecipeViewModel.class);
+                viewModel.getRecipe().observe(this, recipe -> {
+                    if (recipe != null) {
+                        step = recipe.steps.get(stepId);
+                        initializePlayer();
 
-                    ((TextView) view.findViewById(R.id.step_description_text))
-                            .setText(step.getDescription());
+                        ((TextView) view.findViewById(R.id.step_description_text))
+                                .setText(step.getDescription());
+
+                        ((TextView) view.findViewById(R.id.step_title_text))
+                                .setText(step.getShortDescription());
+
+                        getActivity().setTitle("Step " + stepId + "/" + (recipe.steps.size() - 1));
+                    }
                 });
             } else {
                 Timber.e("Invalid recipe");

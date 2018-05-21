@@ -45,10 +45,6 @@ public class RecipeListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(
                 layoutManager);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this,
-                layoutManager.getOrientation());
-        mRecyclerView.addItemDecoration(dividerItemDecoration);
-
         mAdapter = new RecipesAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 

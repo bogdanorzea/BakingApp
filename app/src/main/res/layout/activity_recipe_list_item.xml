@@ -23,7 +23,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:gravity="center_vertical"
-        android:textSize="24sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Recipe Name" />
 
 </LinearLayout>

@@ -6,11 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.bogdanorzea.bakingapp.data.RecipesRepository;
 
-public class StepListViewModelFactory extends ViewModelProvider.NewInstanceFactory {
+public class RecipeViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final RecipesRepository repository;
     private int recipeId;
 
-    public StepListViewModelFactory(RecipesRepository repository, int id) {
+    public RecipeViewModelFactory(RecipesRepository repository, int id) {
         this.repository = repository;
         this.recipeId = id;
     }
@@ -19,6 +19,6 @@ public class StepListViewModelFactory extends ViewModelProvider.NewInstanceFacto
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         //noinspection unchecked
-        return (T) new StepListViewModel(repository, recipeId);
+        return (T) new RecipeViewModel(repository, recipeId);
     }
 }
