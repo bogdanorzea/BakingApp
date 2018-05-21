@@ -14,7 +14,8 @@ import com.bogdanorzea.bakingapp.R;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 
-public class StepDetailActivity extends AppCompatActivity {
+public class StepDetailActivity extends AppCompatActivity
+        implements StepDetailFragment.OnStepNavigationCallback {
 
     public static final String RECIPE_ID = "recipe_id";
     public static final String STEP_ID = "step_id";
@@ -60,6 +61,8 @@ public class StepDetailActivity extends AppCompatActivity {
             fragmentManager.beginTransaction()
                     .add(R.id.step_details_container, stepActivityFragment, "FRAGMENT_STEP")
                     .commit();
+
+            setTitle("Step " + stepId);
         }
     }
 
@@ -83,5 +86,24 @@ public class StepDetailActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    @Override
+    public void replaceStepFragment(int stepId) {
+        this.stepId = stepId;
+
+        StepDetailFragment stepActivityFragment = new StepDetailFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(StepDetailFragment.RECIPE_ID, recipeId);
+        bundle.putInt(StepDetailFragment.STEP_ID, this.stepId);
+        stepActivityFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.step_details_container, stepActivityFragment, "FRAGMENT_STEP")
+                .commit();
+
+        setTitle("Step " + stepId);
     }
 }

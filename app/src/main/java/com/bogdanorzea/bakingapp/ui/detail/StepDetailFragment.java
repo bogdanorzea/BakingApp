@@ -1,5 +1,6 @@
 package com.bogdanorzea.bakingapp.ui.detail;
 
+import android.app.Activity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.net.Uri;
@@ -12,8 +13,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bogdanorzea.bakingapp.BakingApp;
 import com.bogdanorzea.bakingapp.InjectorUtils;
@@ -45,7 +46,6 @@ public class StepDetailFragment extends Fragment {
 
     public static final String RECIPE_ID = "recipe_id";
     public static final String STEP_ID = "step_id";
-
     private static final String PLAYER_PLAY_WHEN_READY = "player_playback_state";
     private static final String PLAYER_CURRENT_POSITION = "player_current_position";
     private static final String PLAYER_CURRENT_WINDOW_INDEX = "player_current_window_index";
@@ -139,9 +139,8 @@ public class StepDetailFragment extends Fragment {
             int recipeId = bundle.getInt(RECIPE_ID, -1);
             int stepId = bundle.getInt(STEP_ID, -1);
 
-            Toast.makeText(getContext(), recipeId + " & " + stepId, Toast.LENGTH_SHORT).show();
-
             if (recipeId != -1 && stepId != -1) {
+                Timber.d("Loaded step #%s from recipe #%d", stepId, recipeId);
                 RecipeViewModelFactory factory =
                         InjectorUtils.provideDetailViewModelFactory(getContext(), recipeId);
                 viewModel = ViewModelProviders.of(this, factory).get(RecipeViewModel.class);
@@ -156,11 +155,41 @@ public class StepDetailFragment extends Fragment {
                         ((TextView) view.findViewById(R.id.step_title_text))
                                 .setText(step.getShortDescription());
 
-                        getActivity().setTitle("Step " + stepId + "/" + (recipe.steps.size() - 1));
+                        Button nextButton = view.findViewById(R.id.next_button);
+                        if (stepId < recipe.steps.size() - 1) {
+                            nextButton.setOnClickListener(v -> {
+                                Activity activity = getActivity();
+                                if (activity != null) {
+                                    try {
+                                        ((OnStepNavigationCallback) activity).replaceStepFragment(stepId + 1);
+                                    } catch (ClassCastException e) {
+                                        Timber.e("Class does not implement OnStepNavigationCallback interface");
+                                    }
+                                }
+                            });
+                        } else {
+                            nextButton.setEnabled(false);
+                        }
+
+                        Button previousButton = view.findViewById(R.id.previous_button);
+                        if (0 < stepId) {
+                            previousButton.setOnClickListener(v -> {
+                                Activity activity = getActivity();
+                                if (activity != null) {
+                                    try {
+                                        ((OnStepNavigationCallback) activity).replaceStepFragment(stepId - 1);
+                                    } catch (ClassCastException e) {
+                                        Timber.e("Class does not implement OnStepNavigationCallback interface");
+                                    }
+                                }
+                            });
+                        } else {
+                            previousButton.setEnabled(false);
+                        }
                     }
                 });
             } else {
-                Timber.e("Invalid recipe");
+                Timber.e("Invalid fragment arguments");
             }
         }
 
@@ -269,6 +298,10 @@ public class StepDetailFragment extends Fragment {
 
     public void setStepId(int stepId) {
         this.stepId = stepId;
+    }
+
+    interface OnStepNavigationCallback {
+        void replaceStepFragment(int stepId);
     }
 
     private class StepSessionCallback extends MediaSessionCompat.Callback {
