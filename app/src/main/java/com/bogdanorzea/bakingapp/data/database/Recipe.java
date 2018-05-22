@@ -17,7 +17,7 @@ public class Recipe extends RecipeInfo {
     }
 
     public String getStringIngredients() {
-        StringBuffer buffer = new StringBuffer("");
+        StringBuilder buffer = new StringBuilder("");
 
         if (ingredients != null) {
             for (Ingredient ingredient : ingredients) {
