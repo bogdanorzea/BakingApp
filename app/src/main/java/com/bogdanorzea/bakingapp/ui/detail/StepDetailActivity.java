@@ -11,6 +11,9 @@ import android.view.View;
 
 import com.bogdanorzea.bakingapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 import static com.bogdanorzea.bakingapp.ui.detail.StepFragmentUtils.replaceFragmentInActivity;
 
@@ -20,6 +23,9 @@ public class StepDetailActivity extends AppCompatActivity
     public static final String RECIPE_ID = "recipe_id";
     public static final String STEP_ID = "step_id";
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private int recipeId;
     private int stepId;
 
@@ -27,7 +33,8 @@ public class StepDetailActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {

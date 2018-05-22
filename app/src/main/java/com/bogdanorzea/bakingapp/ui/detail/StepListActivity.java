@@ -14,6 +14,8 @@ import android.widget.Toast;
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static com.bogdanorzea.bakingapp.ui.detail.StepFragmentUtils.replaceFragmentInActivity;
@@ -22,6 +24,12 @@ public class StepListActivity extends AppCompatActivity
         implements StepDetailFragment.OnStepNavigationCallback {
 
     public static final String RECIPE_ID = "RECIPE_ID";
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.step_list)
+    RecyclerView recyclerView;
+
     private RecipeViewModel viewModel;
     private int recipeId = -1;
     private boolean isTwoPane;
@@ -30,7 +38,8 @@ public class StepListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_list);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        ButterKnife.bind(this);
+
         setSupportActionBar(toolbar);
 
         // Show the Up button in the action bar.
@@ -42,7 +51,6 @@ public class StepListActivity extends AppCompatActivity
         // If this view is present, then the activity should be in two-pane mode.
         isTwoPane = findViewById(R.id.step_details_container) != null;
 
-        RecyclerView recyclerView = findViewById(R.id.step_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setNestedScrollingEnabled(false);

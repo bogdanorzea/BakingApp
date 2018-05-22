@@ -14,6 +14,8 @@ import com.bogdanorzea.bakingapp.data.database.Step;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 import static com.bogdanorzea.bakingapp.ui.detail.StepFragmentUtils.replaceFragmentInActivity;
@@ -82,14 +84,12 @@ class StepAdapter extends RecyclerView.Adapter<StepAdapter.ViewHolder> {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView stepId;
-        final TextView stepName;
+        @BindView(R.id.step_id) TextView stepId;
+        @BindView(R.id.step_name) TextView stepName;
 
         ViewHolder(View itemView) {
             super(itemView);
-
-            stepName = itemView.findViewById(R.id.step_name);
-            stepId = itemView.findViewById(R.id.step_id);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

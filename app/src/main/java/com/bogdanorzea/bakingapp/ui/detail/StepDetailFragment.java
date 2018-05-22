@@ -31,6 +31,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class StepDetailFragment extends Fragment {
@@ -41,15 +43,22 @@ public class StepDetailFragment extends Fragment {
     private static final String PLAYER_CURRENT_POSITION = "player_current_position";
     private static final String PLAYER_CURRENT_WINDOW_INDEX = "player_current_window_index";
 
+    @BindView(R.id.player)
+    PlayerView playerView;
+    @BindView(R.id.next_button)
+    Button nextButton;
+    @BindView(R.id.previous_button)
+    Button previousButton;
+    @BindView(R.id.step_description_text)
+    TextView descriptionText;
+    @BindView(R.id.step_title_text)
+    TextView titleText;
+
     private ExoPlayer exoPlayer;
-    private PlayerView playerView;
     private long playbackPosition = 0;
     private boolean playWhenReady = true;
     private int currentWindowIndex;
 
-    private int recipeId;
-    private int stepId;
-    private RecipeViewModel viewModel;
     private Step step;
 
     public StepDetailFragment() {
@@ -59,7 +68,7 @@ public class StepDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.step_item_details, container, false);
-        playerView = view.findViewById(R.id.player);
+        ButterKnife.bind(this, view);
 
         if (savedInstanceState != null) {
             playWhenReady = savedInstanceState.getBoolean(PLAYER_PLAY_WHEN_READY);
@@ -76,7 +85,7 @@ public class StepDetailFragment extends Fragment {
                 Timber.d("Loaded step #%s from recipe #%d", stepId, recipeId);
                 RecipeViewModelFactory factory =
                         InjectorUtils.provideDetailViewModelFactory(getContext(), recipeId);
-                viewModel = ViewModelProviders.of(this, factory).get(RecipeViewModel.class);
+                RecipeViewModel viewModel = ViewModelProviders.of(this, factory).get(RecipeViewModel.class);
                 viewModel.getRecipe().observe(this, recipe -> {
                     if (recipe != null) {
                         step = recipe.steps.get(stepId);
@@ -87,13 +96,9 @@ public class StepDetailFragment extends Fragment {
                             Toast.makeText(getContext(), "Could not play the clip", Toast.LENGTH_SHORT).show();
                         }
 
-                        ((TextView) view.findViewById(R.id.step_description_text))
-                                .setText(step.getDescription());
+                        descriptionText.setText(step.getDescription());
+                        titleText.setText(step.getShortDescription());
 
-                        ((TextView) view.findViewById(R.id.step_title_text))
-                                .setText(step.getShortDescription());
-
-                        Button nextButton = view.findViewById(R.id.next_button);
                         if (stepId < recipe.steps.size() - 1) {
                             nextButton.setOnClickListener(v -> {
                                 Activity activity = getActivity();
@@ -109,7 +114,6 @@ public class StepDetailFragment extends Fragment {
                             nextButton.setEnabled(false);
                         }
 
-                        Button previousButton = view.findViewById(R.id.previous_button);
                         if (0 < stepId) {
                             previousButton.setOnClickListener(v -> {
                                 Activity activity = getActivity();
@@ -198,14 +202,6 @@ public class StepDetailFragment extends Fragment {
             outState.putLong(PLAYER_CURRENT_POSITION, exoPlayer.getCurrentPosition());
             outState.putInt(PLAYER_CURRENT_WINDOW_INDEX, exoPlayer.getCurrentWindowIndex());
         }
-    }
-
-    public void setRecipeId(int recipeId) {
-        this.recipeId = recipeId;
-    }
-
-    public void setStepId(int stepId) {
-        this.stepId = stepId;
     }
 
     interface OnStepNavigationCallback {
