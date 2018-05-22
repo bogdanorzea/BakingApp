@@ -2,7 +2,6 @@ package com.bogdanorzea.bakingapp.ui.detail;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +12,7 @@ import android.view.View;
 import com.bogdanorzea.bakingapp.R;
 
 import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+import static com.bogdanorzea.bakingapp.ui.detail.StepFragmentUtils.replaceFragmentInActivity;
 
 public class StepDetailActivity extends AppCompatActivity
         implements StepDetailFragment.OnStepNavigationCallback {
@@ -50,18 +50,7 @@ public class StepDetailActivity extends AppCompatActivity
         }
 
         if (savedInstanceState == null) {
-            StepDetailFragment stepActivityFragment = new StepDetailFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putInt(StepDetailFragment.RECIPE_ID, recipeId);
-            bundle.putInt(StepDetailFragment.STEP_ID, stepId);
-            stepActivityFragment.setArguments(bundle);
-
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction()
-                    .add(R.id.step_details_container, stepActivityFragment, "FRAGMENT_STEP")
-                    .commit();
-
+            replaceFragmentInActivity(this, recipeId, stepId);
             setTitle("Step " + stepId);
         }
     }
@@ -92,18 +81,7 @@ public class StepDetailActivity extends AppCompatActivity
     public void replaceStepFragment(int stepId) {
         this.stepId = stepId;
 
-        StepDetailFragment stepActivityFragment = new StepDetailFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putInt(StepDetailFragment.RECIPE_ID, recipeId);
-        bundle.putInt(StepDetailFragment.STEP_ID, this.stepId);
-        stepActivityFragment.setArguments(bundle);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.step_details_container, stepActivityFragment, "FRAGMENT_STEP")
-                .commit();
-
+        replaceFragmentInActivity(this, recipeId, stepId);
         setTitle("Step " + stepId);
     }
 }
