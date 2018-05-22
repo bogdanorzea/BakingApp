@@ -15,7 +15,9 @@
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
+        android:textStyle="bold"
         tools:text="Recipe name" />
 
     <TextView
@@ -29,7 +31,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:textColor="#ffffff"
-        android:textSize="14sp"
+        android:textSize="16sp"
         tools:text="First ingredients\nSecound ingredient\n..." />
 
 </LinearLayout>
