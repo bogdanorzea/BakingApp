@@ -22,8 +22,8 @@ public class RecipeTestUtil {
     }
 
     private static void assertEqualSteps(Recipe oldRecipe, Recipe newRecipe) {
-        List<Step> oldRecipeSteps = oldRecipe.getSteps();
-        List<Step> newRecipeSteps = newRecipe.getSteps();
+        List<Step> oldRecipeSteps = oldRecipe.steps;
+        List<Step> newRecipeSteps = newRecipe.steps;
 
         assertNotNull(oldRecipeSteps);
         assertNotNull(newRecipeSteps);
@@ -36,8 +36,8 @@ public class RecipeTestUtil {
     }
 
     private static void assertEqualIngredients(Recipe oldRecipe, Recipe newRecipe) {
-        List<Ingredient> oldRecipeIngredients = oldRecipe.getIngredients();
-        List<Ingredient> newRecipeIngredients = newRecipe.getIngredients();
+        List<Ingredient> oldRecipeIngredients = oldRecipe.ingredients;
+        List<Ingredient> newRecipeIngredients = newRecipe.ingredients;
 
         assertNotNull(oldRecipeIngredients);
         assertNotNull(newRecipeIngredients);

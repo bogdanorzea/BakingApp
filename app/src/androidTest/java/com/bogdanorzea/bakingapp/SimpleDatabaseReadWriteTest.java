@@ -46,23 +46,22 @@ public class SimpleDatabaseReadWriteTest {
         final int ID = 1;
 
         Recipe recipe = new Recipe(ID, "Test Recipe", 0, null);
+        recipeDao.insert(recipe);
+
         Ingredient ingredient = new Ingredient(ID, 1.0, "ml", "vanilla");
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient);
-        recipe.setIngredients(ingredients);
+        ingredientDao.bulkInsert(ingredients);
 
         Step step = new Step(ID, 1, "Short description", "Long description", "", "");
         List<Step> steps = new ArrayList<>();
         steps.add(step);
-        recipe.setSteps(steps);
+        stepDao.bulkInsert(steps);
 
-        recipeDao.insert(recipe);
+        recipe.ingredients = ingredients;
+        recipe.steps = steps;
 
-        Recipe recipeById = getValue(recipeDao.getRecipeById(ID));
-        recipeById.setSteps(getValue(stepDao.getStepsByRecipeId(ID)));
-        recipeById.setIngredients(getValue(ingredientDao.getIngredientsByRecipeId(ID)));
-
-        RecipeTestUtil.assertEquals(recipe, recipeById);
+        RecipeTestUtil.assertEquals(recipe, getValue(recipeDao.getRecipeById(ID)));
     }
 
 
