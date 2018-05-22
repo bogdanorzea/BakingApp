@@ -73,6 +73,8 @@ public class IngredientWidgetService extends AppCompatActivity {
         RecipesWidgetAdapter adapter = new RecipesWidgetAdapter(this);
         mRecyclerView.setAdapter(adapter);
 
+        setTitle("Select recipe to display ingredients");
+
         RecipeListViewModelFactory factory = InjectorUtils.provideMainViewViewModelFactory(this);
         RecipeListViewModel mViewModel = ViewModelProviders.of(this, factory).get(RecipeListViewModel.class);
         mViewModel.getRecipes().observe(this, newRecipes -> {
@@ -90,7 +92,6 @@ public class IngredientWidgetService extends AppCompatActivity {
         // If this activity was started with an intent without an app widget ID, finish with an error.
         if (mAppWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish();
-            return;
         }
     }
 

@@ -27,8 +27,6 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-
 public class RecipeListActivity extends AppCompatActivity {
 
     private RecipeListViewModel mViewModel;
@@ -42,7 +40,7 @@ public class RecipeListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView mRecyclerView = findViewById(R.id.recipe_list);
-        if (getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+        if (getResources().getConfiguration().smallestScreenWidthDp >= 600) {
             GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
             mRecyclerView.setLayoutManager(layoutManager);
         } else {
