@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,29 +15,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bogdanorzea.bakingapp.BakingApp;
 import com.bogdanorzea.bakingapp.InjectorUtils;
 import com.bogdanorzea.bakingapp.R;
 import com.bogdanorzea.bakingapp.data.database.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.squareup.leakcanary.RefWatcher;
 
 import timber.log.Timber;
 
@@ -50,71 +40,13 @@ public class StepDetailFragment extends Fragment {
     private static final String PLAYER_PLAY_WHEN_READY = "player_playback_state";
     private static final String PLAYER_CURRENT_POSITION = "player_current_position";
     private static final String PLAYER_CURRENT_WINDOW_INDEX = "player_current_window_index";
-    private static final String STEP_MEDIA_SESSION = "STEP_MEDIA_SESSION";
+
     private ExoPlayer exoPlayer;
     private PlayerView playerView;
     private long playbackPosition = 0;
     private boolean playWhenReady = true;
     private int currentWindowIndex;
-    private MediaSessionCompat mediaSession;
-    private PlaybackStateCompat.Builder stateBuilder;
-    private Player.EventListener playerEventListener = new Player.EventListener() {
-        @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
-        }
-
-        @Override
-        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-        }
-
-        @Override
-        public void onLoadingChanged(boolean isLoading) {
-
-        }
-
-        @Override
-        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-            if (playbackState == Player.STATE_READY && playWhenReady) {
-                stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, exoPlayer.getCurrentPosition(), 1f);
-            } else if (playbackState == Player.STATE_READY) {
-                stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED, exoPlayer.getCurrentPosition(), 1f);
-            }
-
-            mediaSession.setPlaybackState(stateBuilder.build());
-        }
-
-        @Override
-        public void onRepeatModeChanged(int repeatMode) {
-
-        }
-
-        @Override
-        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-        }
-
-        @Override
-        public void onPlayerError(ExoPlaybackException error) {
-
-        }
-
-        @Override
-        public void onPositionDiscontinuity(int reason) {
-
-        }
-
-        @Override
-        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-        }
-
-        @Override
-        public void onSeekProcessed() {
-
-        }
-    };
     private int recipeId;
     private int stepId;
     private RecipeViewModel viewModel;
@@ -199,26 +131,7 @@ public class StepDetailFragment extends Fragment {
             }
         }
 
-        createMediaSession();
-
         return view;
-    }
-
-    private void createMediaSession() {
-        Context context = getContext();
-        if (context == null) return;
-
-        mediaSession = new MediaSessionCompat(context, STEP_MEDIA_SESSION);
-        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-        mediaSession.setMediaButtonReceiver(null);
-        stateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(PlaybackStateCompat.ACTION_PLAY |
-                        PlaybackStateCompat.ACTION_PAUSE |
-                        PlaybackStateCompat.ACTION_PLAY_PAUSE |
-                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
-        mediaSession.setPlaybackState(stateBuilder.build());
-        mediaSession.setCallback(new StepSessionCallback());
     }
 
     private void initializePlayer() {
@@ -247,7 +160,6 @@ public class StepDetailFragment extends Fragment {
             MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                     .createMediaSource(mp4VideoUri);
 
-            exoPlayer.addListener(playerEventListener);
             exoPlayer.prepare(videoSource);
         }
 
@@ -259,14 +171,12 @@ public class StepDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
         initializePlayer();
-        if (mediaSession != null) mediaSession.setActive(true);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         releasePlayer();
-        if (mediaSession != null) mediaSession.setActive(false);
     }
 
     private void releasePlayer() {
@@ -290,14 +200,6 @@ public class StepDetailFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mediaSession != null) mediaSession.release();
-        RefWatcher refWatcher = BakingApp.getRefWatcher(getActivity());
-        refWatcher.watch(this);
-    }
-
     public void setRecipeId(int recipeId) {
         this.recipeId = recipeId;
     }
@@ -310,20 +212,4 @@ public class StepDetailFragment extends Fragment {
         void replaceStepFragment(int stepId);
     }
 
-    private class StepSessionCallback extends MediaSessionCompat.Callback {
-        @Override
-        public void onPlay() {
-            exoPlayer.setPlayWhenReady(true);
-        }
-
-        @Override
-        public void onPause() {
-            exoPlayer.setPlayWhenReady(false);
-        }
-
-        @Override
-        public void onSkipToPrevious() {
-            exoPlayer.seekTo(0);
-        }
-    }
 }
